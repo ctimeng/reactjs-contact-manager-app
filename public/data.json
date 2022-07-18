@@ -1,0 +1,75 @@
+{
+    "people":[
+       {
+          "id":1,
+          "name":"Stan Patrick",
+          "city":"Gdansk”",
+          "avatar":"link",
+          "social_networks":{
+             "facebook":"link",
+             "“twitter":"”link”"
+          },
+          "company":"Soft solutions",
+          "position":"frontend developer",
+          "isFavourite":false,
+          "isContact":false
+       },
+       {
+        "id":2,
+        "name":"Stan Patrick",
+        "city":"Gdansk”",
+        "avatar":"link",
+        "social_networks":{
+           "facebook":"link",
+           "“twitter":"”link”"
+        },
+        "company":"Soft solutions",
+        "position":"frontend developer",
+        "isFavourite":false,
+        "isContact":false
+     },
+     {
+        "id":3,
+        "name":"Stan Patrick",
+        "city":"Gdansk”",
+        "avatar":"link",
+        "social_networks":{
+           "facebook":"link",
+           "“twitter":"”link”"
+        },
+        "company":"Soft solutions",
+        "position":"frontend developer",
+        "isFavourite":false,
+        "isContact":false
+     },
+     {
+        "id":4,
+        "name":"Stan Patrick",
+        "city":"Gdansk”",
+        "avatar":"link",
+        "social_networks":{
+           "facebook":"link",
+           "“twitter":"”link”"
+        },
+        "company":"Soft solutions",
+        "position":"frontend developer",
+        "isFavourite":false,
+        "isContact":false
+     },
+     {
+        "id":5,
+        "name":"Stan Patrick",
+        "city":"Gdansk”",
+        "avatar":"link",
+        "social_networks":{
+           "facebook":"link",
+           "“twitter":"”link”"
+        },
+        "company":"Soft solutions",
+        "position":"frontend developer",
+        "isFavourite":false,
+        "isContact":false
+     }
+    ]
+ }
+ 
