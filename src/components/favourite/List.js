@@ -1,15 +1,16 @@
 import ColumnView from "./ColumnView";
 import RowView from "./RowView";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { AddAllPeople } from "../../actions";
 
 const List = (props) => {
   const [isColumn, setIsColumn] = useState(true);
   const [selectedCity, setSelectedCity] = useState('');
   const [search, setSearch] = useState('');
 
-  const filteredData = props.peoples.filter((people) => {
+  const filteredData = props.peoples
+  .filter((people) => people.isFavourite === true)
+  .filter((people) => {
     if (search === '') {
       return people;
     }
@@ -101,4 +102,4 @@ const mapStateToProps = (state) => ({
   ...state,
 });
 
-export default connect(mapStateToProps)(List);
+export default connect(mapStateToProps, null)(List);

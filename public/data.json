@@ -3,11 +3,14 @@
        {
           "id":1,
           "name":"Stan Patrick",
-          "city":"Gdansk”",
-          "avatar":"link",
+          "city":"Gdansk",
+          "avatar":"https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=160&h=160&dpr=1",
           "social_networks":{
-             "facebook":"link",
-             "“twitter":"”link”"
+             "facebook":"https://www.facebook.com",
+             "twitter":"https://help.twitter.com",
+             "instagram":"https://www.instagram.com",
+             "linkedin":"https://www.linkedin.com",
+             "skype":"https://www.skype.com"
           },
           "company":"Soft solutions",
           "position":"frontend developer",
@@ -16,12 +19,12 @@
        },
        {
         "id":2,
-        "name":"Stan Patrick",
-        "city":"Gdansk”",
-        "avatar":"link",
+        "name":"Aleksandr Patrick",
+        "city":"Gdansk",
+        "avatar":"https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=160&h=160&dpr=1",
         "social_networks":{
-           "facebook":"link",
-           "“twitter":"”link”"
+         "facebook":"https://www.facebook.com",
+         "twitter":"https://help.twitter.com"
         },
         "company":"Soft solutions",
         "position":"frontend developer",
@@ -30,12 +33,12 @@
      },
      {
         "id":3,
-        "name":"Stan Patrick",
-        "city":"Gdansk”",
-        "avatar":"link",
+        "name":"Borys Patrick",
+        "city":"Gdansk",
+        "avatar":"https://images.pexels.com/photos/697509/pexels-photo-697509.jpeg?auto=compress&cs=tinysrgb&w=160&h=160&dpr=1",
         "social_networks":{
-           "facebook":"link",
-           "“twitter":"”link”"
+         "facebook":"https://www.facebook.com",
+         "twitter":"https://help.twitter.com"
         },
         "company":"Soft solutions",
         "position":"frontend developer",
@@ -44,12 +47,12 @@
      },
      {
         "id":4,
-        "name":"Stan Patrick",
-        "city":"Gdansk”",
-        "avatar":"link",
+        "name":"Grigory Patrick",
+        "city":"Ukraine, Kharkiv",
+        "avatar":"https://images.pexels.com/photos/943084/pexels-photo-943084.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
         "social_networks":{
-           "facebook":"link",
-           "“twitter":"”link”"
+         "facebook":"https://www.facebook.com",
+         "twitter":"https://help.twitter.com"
         },
         "company":"Soft solutions",
         "position":"frontend developer",
@@ -58,12 +61,12 @@
      },
      {
         "id":5,
-        "name":"Stan Patrick",
-        "city":"Gdansk”",
-        "avatar":"link",
+        "name":"Grigory Patrick",
+        "city":"Ukraine, Lviv",
+        "avatar":"https://images.pexels.com/photos/762020/pexels-photo-762020.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
         "social_networks":{
-           "facebook":"link",
-           "“twitter":"”link”"
+         "facebook":"https://www.facebook.com",
+         "twitter":"https://help.twitter.com"
         },
         "company":"Soft solutions",
         "position":"frontend developer",

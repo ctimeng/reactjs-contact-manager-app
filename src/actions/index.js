@@ -1,8 +1,15 @@
+export const ADD_ALL_PEOPLE = 'ADD_ALL_PEOPLE';
 export const ADD_CONTACT = 'ADD_CONTACT' ;
-export const UPDATE_CONTACT = 'UPDATE_CONTACT';
 export const DELETE_CONTACT = 'DELETE_CONTACT';
-export const EDIT_CONTACT = 'EDIT_CONTACT';
-export const GET_ALL_PEOPLE = 'EDIT_CONTACT';
+export const ADD_FAVOURITE = 'ADD_FAVOURITE';
+export const DELETE_FAVOURITE = 'DELETE_FAVOURITE';
+
+export function AddAllPeople(payload){
+    return {
+        type:'ADD_ALL_PEOPLE',
+        payload
+    }
+}
 
 export function AddContact(payload){
     return {
@@ -18,16 +25,16 @@ export function DeleteContact(payload){
     }
 }
 
-export function EditContact(payload){
+export function AddFavourite(payload){
     return {
-        type:'EDIT_CONTACT',
+        type:'ADD_FAVOURITE',
         payload
     }
 }
 
-export function UpdateContact(payload){
+export function DeleteFavourite(payload){
     return {
-        type:'UPDATE_CONTACT',
+        type:'DELETE_FAVOURITE',
         payload
     }
 }
