@@ -1,16 +1,9 @@
 import { useMemo } from "react";
 import SocialIconView from "../SocialIconView";
-import { connect } from "react-redux";
-import {
-  AddContact,
-  DeleteContact,
-  AddFavourite,
-  DeleteFavourite,
-} from "../../actions";
 
 const ColumnView = (props) => {
   const gridData = (peoples) => {
-    const gridColumn = 3;
+    const gridColumn = 4;
     let rowData = [];
     let columnData = [];
     if (peoples.length <= gridColumn) {
@@ -30,73 +23,61 @@ const ColumnView = (props) => {
 
   const peopleRows = useMemo(() => gridData(props.peoples), [props.peoples]);
 
-  const onAddContact = (event, id) => {
-    event.preventDefault();
-    props.AddContact(id);
-  };
-
-  const onDeleteContact = (event, id) => {
-    event.preventDefault();
-    props.DeleteContact(id);
-  };
-
-  const onAddFavourite = (event, id) => {
-    event.preventDefault();
-    props.AddFavourite(id);
-  };
-
-  const onDeleteFavourite = (event, id) => {
-    event.preventDefault();
-    props.DeleteFavourite(id);
+  const myStyle = {
+    borderBottom: 0,
   };
 
   return (
     <div>
-      {peopleRows.map((peopleColumns, i) => (
-        <div className="row" key={i}>
-          {peopleColumns.map((people, index) => (
-            <div className="col-md-4" key={people.id}>
-              <div className="card card-widget widget-user-2 shadow-sm">
-                <div className="widget-user-header bg-info">
-                  <div className="widget-user-image">
-                    <img
-                      className="img-circle elevation-2"
-                      src={people.avatar}
-                      alt={people.name}
-                    />
-                  </div>
-
+      {peopleRows.map((peopleColumns, index) => (
+        <div className="row" key={index}>
+          {peopleColumns.map((people) => (
+            <div className="col-md-3" key={people.id}>
+              <div
+                className="card card-widget widget-user"
+              >
+                <div className="widget-user-header"></div>
+                <div className="widget-user-image">
+                  <img
+                    className="img-circle elevation-2"
+                    src={people.avatar}
+                    alt={people.name}
+                  />
+                </div>
+                <div className="card-footer" style={{ textAlign: "center" }}>
                   <h3 className="widget-user-username">{people.name}</h3>
                   <h5 className="widget-user-desc">{people.position}</h5>
-                </div>
-                <div className="card-footer p-0">
                   <ul className="nav flex-column">
-                    <li className="nav-item pt-2 pb-2">
+                    <li className="nav-item pt-2 pb-2" style={myStyle}>
                       {Object.keys(people.social_networks).map((key, index) => (
                         <a
                           href={people.social_networks[key]}
                           className="btn btn-sm btn-outline-primary ml-2"
                           key={index}
+                          target="_blank"
+                          rel="noreferrer"
                         >
                           <SocialIconView social={key} />
                         </a>
                       ))}
                     </li>
-                    <li className="nav-item pt-2 pb-2">{people.city}</li>
-                    <li className="nav-item pt-2 pb-2">
+                    <li className="nav-item pt-2 pb-2" style={myStyle}>
+                      <span className="badge bg-success">{people.city}</span>
+                    </li>
+                    <li className="nav-item pt-2 pb-2" style={myStyle}>
                       {people.isContact === false ? (
                         <a
                           href="#/"
-                          className="btn btn-sm btn-primary ml-2"
-                          onClick={(e) => onAddContact(e, `${people.id}`)}
+                          className="btn btn-sm btn-primary ml-2 rounded-pill"
+                          onClick={(e) => props.onAddContact(e, `${people.id}`)}
                         >
                           ADD TO CONTACTS
                         </a>
                       ) : (
                         <a
                           href="#/"
-                          className="btn btn-sm btn-danger ml-2"
-                          onClick={(e) => onDeleteContact(e, `${people.id}`)}
+                          className="btn btn-sm btn-danger ml-2 rounded-pill"
+                          onClick={(e) => props.onDeleteContact(e, `${people.id}`)}
                         >
                           DELETE FROM CONTACTS
                         </a>
@@ -104,16 +85,16 @@ const ColumnView = (props) => {
                       {people.isFavourite === false ? (
                         <a
                           href="#/"
-                          className="btn btn-sm btn-primary ml-2"
-                          onClick={(e) => onAddFavourite(e, `${people.id}`)}
+                          className="btn btn-sm btn-primary ml-2 mt-2 rounded-pill"
+                          onClick={(e) => props.onAddFavourite(e, `${people.id}`)}
                         >
                           ADD TO FAVOURITES
                         </a>
                       ) : (
                         <a
                           href="#/"
-                          className="btn btn-sm btn-danger ml-2"
-                          onClick={(e) => onDeleteFavourite(e, `${people.id}`)}
+                          className="btn btn-sm btn-danger ml-2 mt-2 rounded-pill"
+                          onClick={(e) => props.onDeleteFavourite(e, `${people.id}`)}
                         >
                           DELETE FROM FAVOURITES
                         </a>
@@ -130,13 +111,4 @@ const ColumnView = (props) => {
   );
 };
 
-function mapDispatchToProps(dispatch) {
-  return {
-    AddContact: (id) => dispatch(AddContact(id)),
-    DeleteContact: (id) => dispatch(DeleteContact(id)),
-    AddFavourite: (id) => dispatch(AddFavourite(id)),
-    DeleteFavourite: (id) => dispatch(DeleteFavourite(id)),
-  };
-}
-
-export default connect(null, mapDispatchToProps)(ColumnView);
+export default ColumnView;

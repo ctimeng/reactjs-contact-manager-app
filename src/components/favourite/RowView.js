@@ -1,6 +1,14 @@
 import SocialIconView from "../SocialIconView";
+import { DeleteFavourite } from "../../actions";
+import { connect } from "react-redux";
 
 const RowView = (props) => {
+
+  const onDeleteFavourite = (event, id) => {
+    event.preventDefault();
+    props.DeleteFavourite(id);
+  };
+
   return (
     <ul className="products-list product-list-in-card pl-2 pr-2">
       {props.peoples.map((people, i) => (
@@ -31,12 +39,13 @@ const RowView = (props) => {
                 </li>
                 <li className="nav-item pt-2 pb-2">{people.city}</li>
                 <li className="nav-item pt-2 pb-2">
-                  <a href="#/" className="btn btn-sm btn-primary  ml-2">
-                    ADD TO CONTACTS
-                  </a>
-                  <a href="#/" className="btn btn-sm btn-primary ml-2">
-                    ADD TO FAVOURITES
-                  </a>
+                <a
+                        href="#/"
+                        className="btn btn-sm btn-danger ml-2"
+                        onClick={(e) => onDeleteFavourite(e, `${people.id}`)}
+                      >
+                        DELETE FROM FAVOURITES
+                      </a>
                 </li>
               </ul>
             </span>
@@ -47,4 +56,10 @@ const RowView = (props) => {
   );
 };
 
-export default RowView;
+function mapDispatchToProps(dispatch) {
+  return {
+    DeleteFavourite:(index) => dispatch(DeleteFavourite(index))
+  };
+}
+
+export default connect(null, mapDispatchToProps)(RowView);

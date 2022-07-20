@@ -4,7 +4,7 @@
           "id":1,
           "name":"Stan Patrick",
           "city":"Gdansk",
-          "avatar":"https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=160&h=160&dpr=1",
+          "avatar":"https://cms-assets.tutsplus.com/uploads/users/810/profiles/19338/profileImage/profile-square-extra-small.png",
           "social_networks":{
              "facebook":"https://www.facebook.com",
              "twitter":"https://help.twitter.com",
@@ -21,7 +21,7 @@
         "id":2,
         "name":"Aleksandr Patrick",
         "city":"Gdansk",
-        "avatar":"https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=160&h=160&dpr=1",
+        "avatar":"https://www.stepstherapy.com.au/wp-content/uploads/2018/10/Yazmin-profile-picture-square.jpg",
         "social_networks":{
          "facebook":"https://www.facebook.com",
          "twitter":"https://help.twitter.com"
@@ -35,12 +35,12 @@
         "id":3,
         "name":"Borys Patrick",
         "city":"Gdansk",
-        "avatar":"https://images.pexels.com/photos/697509/pexels-photo-697509.jpeg?auto=compress&cs=tinysrgb&w=160&h=160&dpr=1",
+        "avatar":"https://sunrift.com/wp-content/uploads/2014/12/Blake-profile-photo-square-1024x1024.jpg",
         "social_networks":{
          "facebook":"https://www.facebook.com",
          "twitter":"https://help.twitter.com"
         },
-        "company":"Soft solutions",
+        "company":"HCL Technologies",
         "position":"frontend developer",
         "isFavourite":false,
         "isContact":false
@@ -49,12 +49,12 @@
         "id":4,
         "name":"Grigory Patrick",
         "city":"Ukraine, Kharkiv",
-        "avatar":"https://images.pexels.com/photos/943084/pexels-photo-943084.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+        "avatar":"https://simplybeautysydney.files.wordpress.com/2013/01/brad-profile-square.jpg",
         "social_networks":{
          "facebook":"https://www.facebook.com",
          "twitter":"https://help.twitter.com"
         },
-        "company":"Soft solutions",
+        "company":"Tech Mahindra",
         "position":"frontend developer",
         "isFavourite":false,
         "isContact":false
@@ -63,12 +63,12 @@
         "id":5,
         "name":"Grigory Patrick",
         "city":"Ukraine, Lviv",
-        "avatar":"https://images.pexels.com/photos/762020/pexels-photo-762020.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+        "avatar":"https://www.sony.dk/alphauniverse/assets/resized/2020/11/Julien-Mauve-profile_square_291x291.jpg",
         "social_networks":{
          "facebook":"https://www.facebook.com",
          "twitter":"https://help.twitter.com"
         },
-        "company":"Soft solutions",
+        "company":"Larsen & Toubro Infotech",
         "position":"frontend developer",
         "isFavourite":false,
         "isContact":false

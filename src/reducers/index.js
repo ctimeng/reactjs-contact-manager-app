@@ -9,7 +9,7 @@ import {
 
 const initialState = {
   peoples: [],
-  cities: [],
+  cities: []
 };
 
 export default function variable(state = initialState, action) {
@@ -25,10 +25,9 @@ export default function variable(state = initialState, action) {
       return {
         ...state,
         peoples: action.payload,
-        cities: peopleCities,
+        cities: peopleCities
       };
     case ADD_CONTACT:
-      console.log(action.payload);
       state.peoples.forEach((people, index) => {
         if (Number(people.id) === Number(action.payload)) {
           state.peoples[index].isContact = true;

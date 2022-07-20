@@ -11,13 +11,20 @@ import Favourite from "./components/favourite/Index";
 import FavouriteList from "./components/favourite/List";
 import { connect } from "react-redux";
 import { AddAllPeople } from "./actions";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import Home from "./components/home/Index";
 import Company from "./components/company/Index";
 import CompanyList from "./components/company/List";
+import NoPage from './components/NoPage'
+import firebaseApp from './Firebase';
+import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc } from 'firebase/firestore/lite';
+import { FIREBASE_COLLECTION_PEOPLES } from "./global";
 
 function App(props) {
-  const getData = async () => {
+
+  const db = getFirestore(firebaseApp);
+
+  const getLocalJsonData = async() => {
     fetch("data.json", {
       headers: {
         "Content-Type": "application/json",
@@ -29,18 +36,53 @@ function App(props) {
       })
       .then(function (data) {
         props.AddAllPeople(data.people);
-        /*let peopleCities = ['']
-        data.people.forEach(function (people, i) {
-          if (!peopleCities.includes(people.city)) {
-            peopleCities.push(people.city)
-          }
-        })
-        setCities(peopleCities)*/
+        //synchronizeFirebaseData(data.people)
       });
   };
 
+  const synchronizeFirebaseData = async (peoples) => {
+    await peoples.map(async (people)=> {
+      addDoc(collection(db, FIREBASE_COLLECTION_PEOPLES), people).catch(err=>console.error(err))
+    })
+
+    /*const batch = db.batch();
+    await peoples.map(async (people)=> {
+      const collectionRef = await db.collection('peoples').doc();
+      batch.create(collectionRef, people);
+    });
+
+    const result = await batch.commit();
+    console.log(result)*/
+  }
+
+  const clearFirebaseData = async (collections) => {
+    collections.forEach((docPeople) => {
+      const noteRef = doc(db, FIREBASE_COLLECTION_PEOPLES, docPeople.id);
+      deleteDoc(noteRef);
+    })
+  }
+
+  const initData = async () => {
+    const itemsCol = collection(db, FIREBASE_COLLECTION_PEOPLES);
+    const itemSnapshot = await getDocs(itemsCol);
+    //clearFirebaseData(itemSnapshot.docs)
+    if (itemSnapshot.docs.length <= 0) {
+      getLocalJsonData()
+    } else {
+      let peoples = []
+      itemSnapshot.docs.forEach((peopleDoc)=>{
+        let people = peopleDoc.data()
+        people.refId = peopleDoc.id
+        peoples.push(people)
+      })
+
+      props.AddAllPeople(peoples)
+    }
+  }
+
   useEffect(() => {
-    getData();
+    //initData()
+    getLocalJsonData()
   }, []);
 
   return (
@@ -61,6 +103,7 @@ function App(props) {
             <Route index element={<CompanyList />} />
           </Route>
         </Route>
+        <Route path="*" element={<NoPage />} />
       </Routes>
     </BrowserRouter>
   );

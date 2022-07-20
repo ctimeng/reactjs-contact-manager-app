@@ -2,12 +2,23 @@ import ColumnView from "./ColumnView";
 import RowView from "./RowView";
 import { useState } from "react";
 import { connect } from "react-redux";
-import { AddAllPeople } from "../../actions";
+import {
+  AddContact,
+  DeleteContact,
+  AddFavourite,
+  DeleteFavourite,
+} from "../../actions";
+
+import firebaseApp from '../../Firebase';
+import { getFirestore, updateDoc, doc, query, collection, where, getDocs, orderBy, startAt, endAt } from 'firebase/firestore/lite';
+import { FIREBASE_COLLECTION_PEOPLES } from "../../global";
 
 const List = (props) => {
   const [isColumn, setIsColumn] = useState(true);
   const [selectedCity, setSelectedCity] = useState('');
   const [search, setSearch] = useState('');
+
+  const db = getFirestore(firebaseApp);
 
   const filteredData = props.peoples.filter((people) => {
     if (search === '') {
@@ -28,6 +39,54 @@ const List = (props) => {
     }
   })
 
+  const firebaseSearch = async(search) => {
+    /*const q = query(collection(db, FIREBASE_COLLECTION_PEOPLES), where("name", "==", search));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      // doc.data() is never undefined for query doc snapshots
+      console.log(doc.id, " => ", doc.data());
+    });
+    if (querySnapshot.exists) {
+      console.log("the document exists");
+    } else {
+      console.log("the document not exists");
+    }*/
+    /*firebaseApp.database()
+     .ref(`/rooms/$roomKey/messages`)
+     .orderByKey()
+     .startAt(`${15039996197}`).on('value', snapshot => { console.log('test') });*/
+    
+    /* const startAt = 10; // Choose any value. The result of the query is always the same. The value is ignored.
+    const limit = 10;
+
+    collection(db, FIREBASE_COLLECTION_PEOPLES)
+      .orderBy('name')
+      .startAt(startAt)
+      .limit(limit)
+      .get()
+      .then((data) => {
+        // Always returns the same set of results.
+        // No matter what the `startAt` value is the query aleays returns as it was `0`
+      });*/
+
+      const q = query(
+        collection(db, FIREBASE_COLLECTION_PEOPLES),
+        orderBy("name"),
+        startAt(`%${search}%`),
+        //endAt(search+'\uf8ff')
+      )
+
+      /*const q = query(
+        collection(db, FIREBASE_COLLECTION_PEOPLES), 
+        orderBy("name"), 
+        where("name", ">=", search.toUpperCase()), 
+        where("name", "<=", search.toLowerCase()+ "\uf8ff")
+      );*/
+      
+      const querySnapshot = await getDocs(q);
+      console.log(querySnapshot.docs)
+  }
+
   const columnViewHandler = (e) => {
     setIsColumn(true);
   };
@@ -38,6 +97,42 @@ const List = (props) => {
 
   const handleChange = (e) => {
     setSelectedCity(e.target.value)
+  }
+
+  const updateFirebaseContact = async(id, isContact) => {
+    let peoples = props.peoples.filter((people) => {
+      return Number(people.id) === Number(id)
+    })
+    const noteRef = doc(db, FIREBASE_COLLECTION_PEOPLES, peoples[0].refId);
+    await updateDoc(noteRef, {
+      isContact: isContact
+    });
+  }
+
+  const onAddContact = (event, id) => {
+    event.preventDefault();
+    props.AddContact(id);
+    updateFirebaseContact (id, true)
+  };
+
+  const onDeleteContact = (event, id) => {
+    event.preventDefault();
+    props.DeleteContact(id);
+    updateFirebaseContact (id, false)
+  };
+
+  const onAddFavourite = (event, id) => {
+    event.preventDefault();
+    props.AddFavourite(id);
+  };
+
+  const onDeleteFavourite = (event, id) => {
+    event.preventDefault();
+    props.DeleteFavourite(id);
+  };
+
+  const onSearchHandler = () => {
+    firebaseSearch(search)
   }
 
   return (
@@ -72,7 +167,7 @@ const List = (props) => {
                   onChange={event => setSearch(event.target.value)}
                 />
                 <div className="input-group-append">
-                  <button type="submit" className="btn btn-default">
+                  <button type="button" className="btn btn-default" onClick={onSearchHandler}>
                     <i className="fa fa-search"></i>
                   </button>
                 </div>
@@ -92,7 +187,8 @@ const List = (props) => {
           </div>
         </div>
       </form>
-      {isColumn ? <ColumnView peoples={filteredData} /> : <RowView peoples={filteredData}/>}
+      {isColumn ? <ColumnView peoples={filteredData} onAddContact={onAddContact} onDeleteContact={onDeleteContact} onAddFavourite={onAddFavourite} onDeleteFavourite={onDeleteFavourite}/> : 
+      <RowView peoples={filteredData} onAddContact={onAddContact} onDeleteContact={onDeleteContact} onAddFavourite={onAddFavourite} onDeleteFavourite={onDeleteFavourite}/>}
     </div>
   );
 };
@@ -101,4 +197,13 @@ const mapStateToProps = (state) => ({
   ...state,
 });
 
-export default connect(mapStateToProps)(List);
+function mapDispatchToProps(dispatch) {
+  return {
+    AddContact: (id) => dispatch(AddContact(id)),
+    DeleteContact: (id) => dispatch(DeleteContact(id)),
+    AddFavourite: (id) => dispatch(AddFavourite(id)),
+    DeleteFavourite: (id) => dispatch(DeleteFavourite(id)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(List);

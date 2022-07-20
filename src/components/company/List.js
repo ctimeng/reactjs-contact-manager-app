@@ -1,33 +1,25 @@
-import ColumnView from "./ColumnView";
-import RowView from "./RowView";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { connect } from "react-redux";
 
 const List = (props) => {
   const [isColumn, setIsColumn] = useState(true);
-  const [selectedCity, setSelectedCity] = useState('');
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
 
   const filteredData = props.peoples
-  .filter((people) => people.isContact === true)
-  .filter((people) => {
-    if (search === '') {
-      return people;
-    }
-    else {
-      return people.name.toLowerCase().includes(search.toLowerCase()) || 
-      people.city.toLowerCase().includes(search.toLowerCase()) ||
-      people.company.toLowerCase().includes(search.toLowerCase()) ||
-      people.position.toLowerCase().includes(search.toLowerCase())
-    }
-  }).filter((people) => {
-    if (selectedCity === '') {
-      return people;
-    }
-    else {
-      return people.city.toLowerCase().includes(selectedCity.toLowerCase())
-    }
-  })
+    .map((people) => people["company"])
+    // store the keys of the unique objects
+    .map((people, index, final) => final.indexOf(people) === index && index)
+    .filter((people) => props.peoples[people])
+    .filter((people) => {
+      if (search === "") {
+        return props.peoples[people];
+      } else {
+        return props.peoples[people].company
+          .toLowerCase()
+          .includes(search.toLowerCase());
+      }
+    })
+    .map((people) => props.peoples[people]);
 
   const columnViewHandler = (e) => {
     setIsColumn(true);
@@ -36,10 +28,6 @@ const List = (props) => {
   const rowViewHandler = (e) => {
     setIsColumn(false);
   };
-
-  const handleChange = (e) => {
-    setSelectedCity(e.target.value)
-  }
 
   return (
     <div>
@@ -70,7 +58,7 @@ const List = (props) => {
                   type="search"
                   className="form-control"
                   placeholder="Search"
-                  onChange={event => setSearch(event.target.value)}
+                  onChange={(event) => setSearch(event.target.value)}
                 />
                 <div className="input-group-append">
                   <button type="submit" className="btn btn-default">
@@ -80,20 +68,22 @@ const List = (props) => {
               </div>
             </div>
           </div>
-          <div className="col-3">
-            <div className="form-group">
-              <select className="form-control" value={selectedCity} onChange={handleChange}>
-                {
-                  props.cities.map((city, i) => (
-                    <option value={city} key={i}>{city}</option>
-                  ))
-                }
-              </select>
-            </div>
-          </div>
+          <div className="col-3"></div>
         </div>
       </form>
-      {isColumn ? <ColumnView peoples={filteredData} /> : <RowView peoples={filteredData}/>}
+      <div
+        className={
+          "d-flex bd-highlight mb-3 " + (isColumn ? "flex-row" : "flex-column")
+        }
+      >
+        {filteredData.map((people, i) => (
+          <div className="card ml-2">
+            <div className="card-body">
+              <p className="card-text">{people.company}</p>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

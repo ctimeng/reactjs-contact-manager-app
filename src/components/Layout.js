@@ -1,17 +1,13 @@
-import { Outlet, useNavigate, NavLink } from "react-router-dom";
+import { Outlet, NavLink } from "react-router-dom";
 import { useEffect } from "react";
 
 const Layout = ({ setToken }) => {
-  const navigate = useNavigate();
-
   useEffect(() => {
     document.body.classList.remove("login-page");
   });
 
   const handleLogout = async (e) => {
     e.preventDefault();
-    setToken({});
-    navigate("/");
   };
 
   return (
@@ -32,28 +28,19 @@ const Layout = ({ setToken }) => {
       </nav>
 
       <aside className="main-sidebar sidebar-dark-primary elevation-4">
-        <a href="/" className="brand-link">
-          <img
-            src="img/AdminLTELogo.png"
-            alt="AdminLTE Logo"
-            className="brand-image img-circle elevation-3"
-          />
-          <span className="brand-text font-weight-light">AdminLTE 3</span>
-        </a>
-
         <div className="sidebar">
-          <div className="user-panel mt-3 pb-3 mb-3 d-flex">
-            <div className="image">
+          <div className="card card-widget widget-user">
+            <div className="widget-user-header"></div>
+            <div className="widget-user-image">
               <img
-                src="img/user2-160x160.jpg"
                 className="img-circle elevation-2"
-                alt="User"
+                src="img/user2-160x160.jpg"
+                alt="User Avatar"
               />
             </div>
-            <div className="info">
-              <a href="#/" className="d-block">
-                Alexander Pierce
-              </a>
+            <div className="card-footer">
+              <h3 className="widget-user-username">Alexander Pierce</h3>
+              <h5 className="widget-user-desc">Founder &amp; CEO</h5>
             </div>
           </div>
 
@@ -65,15 +52,19 @@ const Layout = ({ setToken }) => {
               data-accordion="false"
             >
               <li className="nav-item">
-                <a href="/home" className="nav-link">
+                <NavLink
+                  className="nav-link"
+                  activeclassname="is-active"
+                  to="/home"
+                >
                   <i className="nav-icon fas fa-home"></i>
                   <p>HOME</p>
-                </a>
+                </NavLink>
               </li>
               <li className="nav-item">
                 <NavLink
                   className="nav-link"
-                  activeClassName="is-active"
+                  activeclassname="is-active"
                   to="/contact"
                 >
                   <i className="nav-icon fas fa-address-book"></i>
@@ -83,7 +74,7 @@ const Layout = ({ setToken }) => {
               <li className="nav-item">
                 <NavLink
                   className="nav-link"
-                  activeClassName="is-active"
+                  activeclassname="is-active"
                   to="/favourite"
                 >
                   <i className="nav-icon fas fa-heart"></i>
@@ -93,7 +84,7 @@ const Layout = ({ setToken }) => {
               <li className="nav-item">
                 <NavLink
                   className="nav-link"
-                  activeClassName="is-active"
+                  activeclassname="is-active"
                   to="/"
                 >
                   <i className="nav-icon fas fa-user"></i>
@@ -101,10 +92,14 @@ const Layout = ({ setToken }) => {
                 </NavLink>
               </li>
               <li className="nav-item">
-                <a href="/company" className="nav-link">
+                <NavLink
+                  className="nav-link"
+                  activeclassname="is-active"
+                  to="/company"
+                >
                   <i className="nav-icon fas fa-shopping-bag"></i>
                   <p>COMPANIES</p>
-                </a>
+                </NavLink>
               </li>
               <li className="nav-item">
                 <a href="#/" className="nav-link" onClick={handleLogout}>
@@ -120,10 +115,6 @@ const Layout = ({ setToken }) => {
         <Outlet />
       </div>
       <footer className="main-footer">
-        <strong>
-          Copyright &copy; 2014-2021{" "}
-          <a href="https://adminlte.io">AdminLTE.io</a>.
-        </strong>
         All rights reserved.
         <div className="float-right d-none d-sm-inline-block">
           <b>Version</b> 3.2.0
