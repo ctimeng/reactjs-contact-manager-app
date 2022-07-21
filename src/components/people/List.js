@@ -11,7 +11,7 @@ import {
 
 import firebaseApp from '../../Firebase';
 import { getFirestore, updateDoc, doc, query, collection, where, getDocs, orderBy, startAt, endAt } from 'firebase/firestore/lite';
-import { FIREBASE_COLLECTION_PEOPLES } from "../../global";
+import { FIREBASE_COLLECTION_PEOPLES, searchPeoples } from "../../global";
 
 const List = (props) => {
   const [isColumn, setIsColumn] = useState(true);
@@ -20,24 +20,7 @@ const List = (props) => {
 
   const db = getFirestore(firebaseApp);
 
-  const filteredData = props.peoples.filter((people) => {
-    if (search === '') {
-      return people;
-    }
-    else {
-      return people.name.toLowerCase().includes(search.toLowerCase()) || 
-      people.city.toLowerCase().includes(search.toLowerCase()) ||
-      people.company.toLowerCase().includes(search.toLowerCase()) ||
-      people.position.toLowerCase().includes(search.toLowerCase())
-    }
-  }).filter((people) => {
-    if (selectedCity === '') {
-      return people;
-    }
-    else {
-      return people.city.toLowerCase().includes(selectedCity.toLowerCase())
-    }
-  })
+  const filteredData = searchPeoples(props.peoples, search, selectedCity)
 
   const firebaseSearch = async(search) => {
     /*const q = query(collection(db, FIREBASE_COLLECTION_PEOPLES), where("name", "==", search));

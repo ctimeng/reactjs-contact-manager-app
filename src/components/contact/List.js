@@ -1,33 +1,20 @@
 import ColumnView from "./ColumnView";
 import RowView from "./RowView";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { connect } from "react-redux";
+import { DeleteContact } from "../../actions";
+import { searchPeoples } from "../../global";
 
 const List = (props) => {
   const [isColumn, setIsColumn] = useState(true);
-  const [selectedCity, setSelectedCity] = useState('');
-  const [search, setSearch] = useState('');
+  const [selectedCity, setSelectedCity] = useState("");
+  const [search, setSearch] = useState("");
 
-  const filteredData = props.peoples
-  .filter((people) => people.isContact === true)
-  .filter((people) => {
-    if (search === '') {
-      return people;
-    }
-    else {
-      return people.name.toLowerCase().includes(search.toLowerCase()) || 
-      people.city.toLowerCase().includes(search.toLowerCase()) ||
-      people.company.toLowerCase().includes(search.toLowerCase()) ||
-      people.position.toLowerCase().includes(search.toLowerCase())
-    }
-  }).filter((people) => {
-    if (selectedCity === '') {
-      return people;
-    }
-    else {
-      return people.city.toLowerCase().includes(selectedCity.toLowerCase())
-    }
-  })
+  const filteredData = searchPeoples(
+    props.peoples,
+    search,
+    selectedCity
+  ).filter((people) => people.isContact === true);
 
   const columnViewHandler = (e) => {
     setIsColumn(true);
@@ -38,8 +25,13 @@ const List = (props) => {
   };
 
   const handleChange = (e) => {
-    setSelectedCity(e.target.value)
-  }
+    setSelectedCity(e.target.value);
+  };
+
+  const onDeleteContact = (event, index) => {
+    event.preventDefault();
+    props.DeleteContact(index);
+  };
 
   return (
     <div>
@@ -70,7 +62,7 @@ const List = (props) => {
                   type="search"
                   className="form-control"
                   placeholder="Search"
-                  onChange={event => setSearch(event.target.value)}
+                  onChange={(event) => setSearch(event.target.value)}
                 />
                 <div className="input-group-append">
                   <button type="submit" className="btn btn-default">
@@ -82,18 +74,26 @@ const List = (props) => {
           </div>
           <div className="col-3">
             <div className="form-group">
-              <select className="form-control" value={selectedCity} onChange={handleChange}>
-                {
-                  props.cities.map((city, i) => (
-                    <option value={city} key={i}>{city}</option>
-                  ))
-                }
+              <select
+                className="form-control"
+                value={selectedCity}
+                onChange={handleChange}
+              >
+                {props.cities.map((city, i) => (
+                  <option value={city} key={i}>
+                    {city}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
         </div>
       </form>
-      {isColumn ? <ColumnView peoples={filteredData} /> : <RowView peoples={filteredData}/>}
+      {isColumn ? (
+        <ColumnView peoples={filteredData} onDeleteContact={onDeleteContact} />
+      ) : (
+        <RowView peoples={filteredData} onDeleteContact={onDeleteContact} />
+      )}
     </div>
   );
 };
@@ -102,4 +102,10 @@ const mapStateToProps = (state) => ({
   ...state,
 });
 
-export default connect(mapStateToProps, null)(List);
+function mapDispatchToProps(dispatch) {
+  return {
+    DeleteContact: (index) => dispatch(DeleteContact(index)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(List);
