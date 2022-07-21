@@ -3,19 +3,32 @@ import {
   ADD_CONTACT,
   DELETE_CONTACT,
   ADD_FAVOURITE,
-  DELETE_FAVOURITE,
-  GetDefualtContact,
+  DELETE_FAVOURITE
 } from "../actions";
+
+import { FIREBASE_COLLECTION_PEOPLES, getFindIndexById } from "../global";
+import firebaseApp from '../Firebase';
+import { doc, getFirestore, updateDoc } from "firebase/firestore";
 
 const initialState = {
   peoples: [],
   cities: []
 };
 
+const db = getFirestore(firebaseApp);
+
+const updateFirebase = async(id, fields) => {
+  const noteRef = doc(db, FIREBASE_COLLECTION_PEOPLES, id);
+  await updateDoc(noteRef, fields);
+}
+
 export default function variable(state = initialState, action) {
+  let index = 0
+  let refId = ''
+
   switch (action.type) {
     case ADD_ALL_PEOPLE:
-      let peopleCities = [""];
+      let peopleCities = ["All City"];
       action.payload.forEach(function (people, i) {
         if (!peopleCities.includes(people.city)) {
           peopleCities.push(people.city);
@@ -28,44 +41,48 @@ export default function variable(state = initialState, action) {
         cities: peopleCities
       };
     case ADD_CONTACT:
-      state.peoples.forEach((people, index) => {
-        if (Number(people.id) === Number(action.payload)) {
-          state.peoples[index].isContact = true;
-        }
-      });
+      index = getFindIndexById(state.peoples, action.payload)
+      state.peoples[index].isContact = true;
+      refId = state.peoples[index].refId
+      if ( refId !== '') {
+        updateFirebase(refId, { isContact : true })
+      }
 
       return {
         ...state,
         peoples: [...state.peoples],
       };
     case DELETE_CONTACT:
-      state.peoples.forEach((people, index) => {
-        if (Number(people.id) === Number(action.payload)) {
-          state.peoples[index].isContact = false;
-        }
-      });
+      index = getFindIndexById(state.peoples, action.payload)
+      state.peoples[index].isContact = false;
+      refId = state.peoples[index].refId
+      if ( refId !== '') {
+        updateFirebase(refId, { isContact : false })
+      }
 
       return {
         ...state,
         peoples: [...state.peoples],
       };
     case ADD_FAVOURITE:
-      state.peoples.forEach((people, index) => {
-        if (Number(people.id) === Number(action.payload)) {
-          state.peoples[index].isFavourite = true;
-        }
-      });
+      index = getFindIndexById(state.peoples, action.payload)
+      state.peoples[index].isFavourite = true;
+      refId = state.peoples[index].refId
+      if ( refId !== '') {
+        updateFirebase(refId, { isFavourite : true })
+      }
 
       return {
         ...state,
         peoples: [...state.peoples],
       };
     case DELETE_FAVOURITE:
-      state.peoples.forEach((people, index) => {
-        if (Number(people.id) === Number(action.payload)) {
-          state.peoples[index].isFavourite = false;
-        }
-      });
+      index = getFindIndexById(state.peoples, action.payload)
+      state.peoples[index].isFavourite = false;
+      refId = state.peoples[index].refId
+      if ( refId !== '') {
+        updateFirebase(refId, { isFavourite : false })
+      }
 
       return {
         ...state,

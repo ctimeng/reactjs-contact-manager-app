@@ -1,4 +1,4 @@
-const FIREBASE_ENABLE = true;
+const FIREBASE_ENABLE = false;
 const FIREBASE_COLLECTION_PEOPLES = "peoples";
 const GRID_COLUMN = 4;
 const COLUMN_SIZE = 12 / GRID_COLUMN;
@@ -48,11 +48,16 @@ const searchPeoples = (
     });
 };
 
+const getFindIndexById = (peoples, id) => {
+  return peoples.findIndex(people => Number(people.id) === Number(id))
+}
+
 export {
   FIREBASE_ENABLE,
   FIREBASE_COLLECTION_PEOPLES,
   GRID_COLUMN,
   COLUMN_SIZE,
   gridData,
-  searchPeoples
+  searchPeoples,
+  getFindIndexById
 };

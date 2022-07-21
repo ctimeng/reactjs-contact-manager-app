@@ -12,7 +12,6 @@ import {
 import firebaseApp from "../../Firebase";
 import {
   getFirestore,
-  updateDoc,
   doc,
   query,
   collection,
@@ -20,12 +19,12 @@ import {
   getDocs,
   orderBy,
   startAt,
-  endAt
+  endAt,
 } from "firebase/firestore/lite";
 import { FIREBASE_COLLECTION_PEOPLES, searchPeoples } from "../../global";
 
 const List = (props) => {
-  const [isColumn, setIsColumn] = useState(true);
+  const [option, setOption] = useState("1");
   const [selectedCity, setSelectedCity] = useState("");
   const [search, setSearch] = useState("");
 
@@ -34,6 +33,7 @@ const List = (props) => {
   const filteredData = searchPeoples(props.peoples, search, selectedCity);
 
   const firebaseSearch = async (search) => {
+    /*There are no content searches in Firebase need to integrate with ElasticSearch */
     /*const q = query(collection(db, FIREBASE_COLLECTION_PEOPLES), where("name", "==", search));
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
@@ -53,12 +53,12 @@ const List = (props) => {
         endAt(search+'\uf8ff')
       )*/
 
-      const q = query(
-        collection(db, FIREBASE_COLLECTION_PEOPLES),
-        orderBy("name"),
-        startAt(search),
-        endAt("\uf8ff")
-      )
+    const q = query(
+      collection(db, FIREBASE_COLLECTION_PEOPLES),
+      orderBy("name"),
+      startAt(search),
+      endAt("\uf8ff")
+    );
 
     /*const q = query(
       collection(db, FIREBASE_COLLECTION_PEOPLES),
@@ -71,38 +71,14 @@ const List = (props) => {
     console.log(querySnapshot.docs);
   };
 
-  const columnViewHandler = (e) => {
-    setIsColumn(true);
-  };
-
-  const rowViewHandler = (e) => {
-    setIsColumn(false);
-  };
-
-  const handleChange = (e) => {
-    setSelectedCity(e.target.value);
-  };
-
-  const updateFirebaseContact = async (id, isContact) => {
-    let peoples = props.peoples.filter((people) => {
-      return Number(people.id) === Number(id);
-    });
-    const noteRef = doc(db, FIREBASE_COLLECTION_PEOPLES, peoples[0].refId);
-    await updateDoc(noteRef, {
-      isContact: isContact,
-    });
-  };
-
   const onAddContact = (event, id) => {
     event.preventDefault();
     props.AddContact(id);
-    //updateFirebaseContact (id, true)
   };
 
   const onDeleteContact = (event, id) => {
     event.preventDefault();
     props.DeleteContact(id);
-    //updateFirebaseContact (id, false)
   };
 
   const onAddFavourite = (event, id) => {
@@ -124,21 +100,31 @@ const List = (props) => {
       <form>
         <div className="row">
           <div className="col-2">
-            <div className="btn-group">
-              <button
-                type="button"
-                className="btn btn-info active"
-                onClick={columnViewHandler}
-              >
+            <div className="btn-group btn-group-toggle" data-toggle="buttons">
+              <label className={'btn btn-info '+ (option==="1"?'active':'')}>
+                <input
+                  type="radio"
+                  name="options"
+                  id="option_a1"
+                  autoComplete="off"
+                  checked=""
+                  value="1"
+
+                  onChange={(event) => setOption(event.target.value)}
+                />{" "}
                 <i className="fas fa-th-large"></i>
-              </button>
-              <button
-                type="button"
-                className="btn btn-info"
-                onClick={rowViewHandler}
-              >
+              </label>
+              <label className={'btn btn-info '+ (option==="2"?'active':'')}>
+                <input
+                  type="radio"
+                  name="options"
+                  id="option_a2"
+                  autoComplete="off"
+                  value="2"
+                  onChange={(event) => setOption(event.target.value)}
+                />{" "}
                 <i className="fas fa-align-justify"></i>
-              </button>
+              </label>
             </div>
           </div>
           <div className="col-7">
@@ -167,7 +153,7 @@ const List = (props) => {
               <select
                 className="form-control"
                 value={selectedCity}
-                onChange={handleChange}
+                onChange={(event) => setSelectedCity(event.target.value)}
               >
                 {props.cities.map((city, i) => (
                   <option value={city} key={i}>
@@ -179,7 +165,7 @@ const List = (props) => {
           </div>
         </div>
       </form>
-      {isColumn ? (
+      {option==="1" ? (
         <ColumnView
           peoples={filteredData}
           onAddContact={onAddContact}

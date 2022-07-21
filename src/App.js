@@ -17,8 +17,8 @@ import Company from "./components/company/Index";
 import CompanyList from "./components/company/List";
 import NoPage from './components/NoPage'
 import firebaseApp from './Firebase';
-import { FIREBASE_COLLECTION_PEOPLES } from "./global";
-import { onSnapshot, doc, getFirestore, collection, getDocs, addDoc, deleteDoc, query } from "firebase/firestore";
+import { FIREBASE_COLLECTION_PEOPLES, FIREBASE_ENABLE } from "./global";
+import { onSnapshot, doc, getFirestore, collection, getDocs, addDoc, deleteDoc } from "firebase/firestore";
 
 function App(props) {
 
@@ -35,15 +35,23 @@ function App(props) {
         return response.json();
       })
       .then(function (data) {
-        props.AddAllPeople(data.people);
-        //synchronizeFirebaseData(data.people)
+        if (FIREBASE_ENABLE) {
+          synchronizeFirebaseData(data.people)
+        } else {
+          cacheLocalPeoples(data.people, false);
+        }
       });
   };
 
   const synchronizeFirebaseData = async (peoples) => {
+    let refPeoples = [] 
     await peoples.map(async (people)=> {
-      addDoc(collection(db, FIREBASE_COLLECTION_PEOPLES), people).catch(err=>console.error(err))
+      const docRef = await addDoc(collection(db, FIREBASE_COLLECTION_PEOPLES), people).catch(err=>console.error(err))
+      people.refId = docRef.id
+      refPeoples.push(people)
     })
+
+    props.AddAllPeople(refPeoples)
 
     /*const batch = db.batch();
     await peoples.map(async (people)=> {
@@ -64,16 +72,9 @@ function App(props) {
 
   const initData = async () => {
     const itemsCol = collection(db, FIREBASE_COLLECTION_PEOPLES);
-    //const itemSnapshot = await getDocs(itemsCol);
-    /*const unsub = onSnapshot(doc(db, FIREBASE_COLLECTION_PEOPLES, "SF"), (doc) => {
-        console.log("Current data: ", doc.data());
-    });*/
+    const itemSnapshot = await getDocs(itemsCol);
 
-    /*itemSnapshot.docs.forEach((peopleDoc)=>{
-       console.log(peopleDoc.data())
-    })*/
-
-    const unsubscribe = onSnapshot(query(itemsCol), (snapshot) => {
+    /*const unsubscribe = onSnapshot(query(itemsCol), (snapshot) => {
       snapshot.docChanges().forEach((change) => {
         if (change.type === "added") {
             console.log("New city: ", change.doc.data());
@@ -85,25 +86,38 @@ function App(props) {
             console.log("Removed city: ", change.doc.data());
         }
       });
-    });
+    });*/
     //clearFirebaseData(itemSnapshot.docs)
-    /*if (itemSnapshot.docs.length <= 0) {
+    if (itemSnapshot.docs.length <= 0) {
       getLocalJsonData()
     } else {
-      let peoples = []
-      itemSnapshot.docs.forEach((peopleDoc)=>{
-        let people = peopleDoc.data()
-        people.refId = peopleDoc.id
-        peoples.push(people)
-      })
+      cacheLocalPeoples(itemSnapshot.docs, true)
+    }
+  }
 
-      props.AddAllPeople(peoples)
-    }*/
+  const cacheLocalPeoples = (peoples, isFirebase = false) => {
+    let cachePeoples = []
+    peoples.forEach((people)=>{
+      let cachePeople = people
+      if (isFirebase) {
+        cachePeople = people.data()
+        cachePeople.refId = people.id
+      } else {
+        cachePeople.refId = ''
+      }
+      
+      cachePeoples.push(cachePeople)
+    })
+
+    props.AddAllPeople(cachePeoples)
   }
 
   useEffect(() => {
-    getLocalJsonData()
-    //initData()
+    if (FIREBASE_ENABLE) {
+      initData()
+    } else {
+      getLocalJsonData()
+    }
   }, []);
 
   return (
