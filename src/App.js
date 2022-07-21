@@ -17,8 +17,8 @@ import Company from "./components/company/Index";
 import CompanyList from "./components/company/List";
 import NoPage from './components/NoPage'
 import firebaseApp from './Firebase';
-import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc } from 'firebase/firestore/lite';
 import { FIREBASE_COLLECTION_PEOPLES } from "./global";
+import { onSnapshot, doc, getFirestore, collection, getDocs, addDoc, deleteDoc, query } from "firebase/firestore";
 
 function App(props) {
 
@@ -64,9 +64,30 @@ function App(props) {
 
   const initData = async () => {
     const itemsCol = collection(db, FIREBASE_COLLECTION_PEOPLES);
-    const itemSnapshot = await getDocs(itemsCol);
+    //const itemSnapshot = await getDocs(itemsCol);
+    /*const unsub = onSnapshot(doc(db, FIREBASE_COLLECTION_PEOPLES, "SF"), (doc) => {
+        console.log("Current data: ", doc.data());
+    });*/
+
+    /*itemSnapshot.docs.forEach((peopleDoc)=>{
+       console.log(peopleDoc.data())
+    })*/
+
+    const unsubscribe = onSnapshot(query(itemsCol), (snapshot) => {
+      snapshot.docChanges().forEach((change) => {
+        if (change.type === "added") {
+            console.log("New city: ", change.doc.data());
+        }
+        if (change.type === "modified") {
+            console.log("Modified city: ", change.doc.data());
+        }
+        if (change.type === "removed") {
+            console.log("Removed city: ", change.doc.data());
+        }
+      });
+    });
     //clearFirebaseData(itemSnapshot.docs)
-    if (itemSnapshot.docs.length <= 0) {
+    /*if (itemSnapshot.docs.length <= 0) {
       getLocalJsonData()
     } else {
       let peoples = []
@@ -77,12 +98,12 @@ function App(props) {
       })
 
       props.AddAllPeople(peoples)
-    }
+    }*/
   }
 
   useEffect(() => {
-    //initData()
     getLocalJsonData()
+    //initData()
   }, []);
 
   return (

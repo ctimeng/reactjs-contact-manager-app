@@ -16,8 +16,8 @@ const ColumnView = (props) => {
               people={people}
               onAddContact={null}
               onDeleteContact={null}
-              onAddFavourite={props.onAddFavourite}
-              onDeleteFavourite={null} />
+              onAddFavourite={null}
+              onDeleteFavourite={props.onDeleteFavourite} />
             </div>
           ))}
         </div>

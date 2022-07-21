@@ -76,8 +76,8 @@ const List = (props) => {
           "d-flex bd-highlight mb-3 " + (isColumn ? "flex-row" : "flex-column")
         }
       >
-        {filteredData.map((people, i) => (
-          <div className="card ml-2">
+        {filteredData.map((people, index) => (
+          <div className="card ml-2" key={index}>
             <div className="card-body">
               <p className="card-text">{people.company}</p>
             </div>

@@ -43,7 +43,7 @@ const CardRowView = ({
                   display:
                     onAddContact === null && onDeleteContact === null
                       ? "none"
-                      : "block",
+                      : "inline",
                 }}
               >
                 {people.isContact === false ? (
@@ -69,7 +69,7 @@ const CardRowView = ({
                   display:
                     onAddFavourite === null && onDeleteFavourite === null
                       ? "none"
-                      : "block",
+                      : "inline",
                 }}
               >
                 {people.isFavourite === false ? (
