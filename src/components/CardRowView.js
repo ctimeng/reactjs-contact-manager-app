@@ -5,7 +5,7 @@ const CardRowView = ({
   onAddContact,
   onDeleteContact,
   onAddFavourite,
-  onDeleteFavourite
+  onDeleteFavourite,
 }) => {
   return (
     <div>
@@ -38,58 +38,62 @@ const CardRowView = ({
             </li>
             <li className="nav-item pt-2 pb-2">{people.city}</li>
             <li className="nav-item pt-2 pb-2">
-              <span
-                style={{
-                  display:
-                    onAddContact === null && onDeleteContact === null
-                      ? "none"
-                      : "inline",
-                }}
-              >
-                {people.isContact === false ? (
-                  <a
-                    href="#/"
-                    className="btn btn-sm btn-primary ml-2 rounded-pill"
-                    onClick={(e) => onAddContact(e, `${people.id}`)}
-                  >
-                    ADD TO CONTACTS
-                  </a>
-                ) : (
-                  <a
-                    href="#/"
-                    className="btn btn-sm btn-danger ml-2 rounded-pill"
-                    onClick={(e) => onDeleteContact(e, `${people.id}`)}
-                  >
-                    DELETE FROM CONTACTS
-                  </a>
-                )}
-              </span>
-              <span
-                style={{
-                  display:
-                    onAddFavourite === null && onDeleteFavourite === null
-                      ? "none"
-                      : "inline",
-                }}
-              >
-                {people.isFavourite === false ? (
-                  <a
-                    href="#/"
-                    className="btn btn-sm btn-primary ml-2 rounded-pill"
-                    onClick={(e) => onAddFavourite(e, `${people.id}`)}
-                  >
-                    ADD TO FAVOURITES
-                  </a>
-                ) : (
-                  <a
-                    href="#/"
-                    className="btn btn-sm btn-danger ml-2 rounded-pill"
-                    onClick={(e) => onDeleteFavourite(e, `${people.id}`)}
-                  >
-                    DELETE FROM FAVOURITES
-                  </a>
-                )}
-              </span>
+              <div className="row">
+                <div
+                  className="col-md-2 col-sm-12"
+                  style={{
+                    display:
+                      onAddContact === null && onDeleteContact === null
+                        ? "none"
+                        : "inline",
+                  }}
+                >
+                  {people.isContact === false ? (
+                    <a
+                      href="#/"
+                      className="btn btn-sm btn-primary mt-2 rounded-pill"
+                      onClick={(e) => onAddContact(e, `${people.id}`)}
+                    >
+                      ADD TO CONTACTS
+                    </a>
+                  ) : (
+                    <a
+                      href="#/"
+                      className="btn btn-sm btn-danger mt-2 rounded-pill"
+                      onClick={(e) => onDeleteContact(e, `${people.id}`)}
+                    >
+                      DELETE FROM CONTACTS
+                    </a>
+                  )}
+                </div>
+                <div
+                  className="col-md-2 col-sm-12"
+                  style={{
+                    display:
+                      onAddFavourite === null && onDeleteFavourite === null
+                        ? "none"
+                        : "inline",
+                  }}
+                >
+                  {people.isFavourite === false ? (
+                    <a
+                      href="#/"
+                      className="btn btn-sm btn-primary mt-2 rounded-pill"
+                      onClick={(e) => onAddFavourite(e, `${people.id}`)}
+                    >
+                      ADD TO FAVOURITES
+                    </a>
+                  ) : (
+                    <a
+                      href="#/"
+                      className="btn btn-sm btn-danger mt-2 rounded-pill"
+                      onClick={(e) => onDeleteFavourite(e, `${people.id}`)}
+                    >
+                      DELETE FROM FAVOURITES
+                    </a>
+                  )}
+                </div>
+              </div>
             </li>
           </ul>
         </span>

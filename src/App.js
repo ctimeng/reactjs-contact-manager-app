@@ -15,17 +15,24 @@ import { useEffect } from "react";
 import Home from "./components/home/Index";
 import Company from "./components/company/Index";
 import CompanyList from "./components/company/List";
-import NoPage from './components/NoPage'
-import firebaseApp from './Firebase';
+import NoPage from "./components/NoPage";
+import firebaseApp from "./Firebase";
 import { FIREBASE_COLLECTION_PEOPLES, FIREBASE_ENABLE } from "./global";
-import { onSnapshot, doc, getFirestore, collection, getDocs, addDoc, deleteDoc } from "firebase/firestore";
+import {
+  onSnapshot,
+  doc,
+  getFirestore,
+  collection,
+  getDocs,
+  addDoc,
+  deleteDoc,
+} from "firebase/firestore";
 
 function App(props) {
-
   const db = getFirestore(firebaseApp);
 
-  const getLocalJsonData = async() => {
-    fetch("data.json", {
+  const getLocalJsonData = async () => {
+    return await fetch("data.json", {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -34,45 +41,34 @@ function App(props) {
       .then(function (response) {
         return response.json();
       })
-      .then(function (data) {
-        if (FIREBASE_ENABLE) {
-          synchronizeFirebaseData(data.people)
-        } else {
-          cacheLocalPeoples(data.people, false);
-        }
+      .then((data) => {
+        return data["people"];
       });
   };
 
-  const synchronizeFirebaseData = async (peoples) => {
-    let refPeoples = [] 
-    await peoples.map(async (people)=> {
-      const docRef = await addDoc(collection(db, FIREBASE_COLLECTION_PEOPLES), people).catch(err=>console.error(err))
-      people.refId = docRef.id
-      refPeoples.push(people)
-    })
-
-    props.AddAllPeople(refPeoples)
-
-    /*const batch = db.batch();
-    await peoples.map(async (people)=> {
-      const collectionRef = await db.collection('peoples').doc();
-      batch.create(collectionRef, people);
+  const synchronizeFirebaseData = async(peoples) => {
+    let refPeoples = [];
+    Promise.all(peoples.map(async (people) => {
+        const docRef = await addDoc(
+          collection(db, FIREBASE_COLLECTION_PEOPLES),
+          people
+        ).catch((err) => console.error(err));
+        people.refId = docRef.id;
+        refPeoples.push(people);
+    })).then(results => {
+      props.AddAllPeople(refPeoples);
     });
-
-    const result = await batch.commit();
-    console.log(result)*/
-  }
+  };
 
   const clearFirebaseData = async (collections) => {
     collections.forEach((docPeople) => {
       const noteRef = doc(db, FIREBASE_COLLECTION_PEOPLES, docPeople.id);
       deleteDoc(noteRef);
-    })
-  }
+    });
+  };
 
-  const initData = async () => {
+  const getFirebaseData = async () => {
     const itemsCol = collection(db, FIREBASE_COLLECTION_PEOPLES);
-    const itemSnapshot = await getDocs(itemsCol);
 
     /*const unsubscribe = onSnapshot(query(itemsCol), (snapshot) => {
       snapshot.docChanges().forEach((change) => {
@@ -87,37 +83,43 @@ function App(props) {
         }
       });
     });*/
-    //clearFirebaseData(itemSnapshot.docs)
-    if (itemSnapshot.docs.length <= 0) {
-      getLocalJsonData()
+
+    return await getDocs(itemsCol);
+  };
+
+  const cacheFirebasePeoples = (peoples) => {
+    let cachePeoples = [];
+    peoples.forEach((people) => {
+      let cachePeople = people;
+      cachePeople = people.data();
+      cachePeople.refId = people.id;
+      cachePeoples.push(cachePeople);
+    });
+
+    props.AddAllPeople(cachePeoples);
+  };
+
+  const initData = async () => {
+    if (FIREBASE_ENABLE) {
+      getFirebaseData().then(function (itemSnapshot) {
+        if (itemSnapshot.docs.length > 0) {
+          //clearFirebaseData(itemSnapshot.docs)
+          cacheFirebasePeoples(itemSnapshot.docs, true);
+        } else {
+          getLocalJsonData().then(function (data) {
+            synchronizeFirebaseData(data);
+          });
+        }
+      });
     } else {
-      cacheLocalPeoples(itemSnapshot.docs, true)
+      getLocalJsonData().then(function (data) {
+        props.AddAllPeople(data);
+      });
     }
-  }
-
-  const cacheLocalPeoples = (peoples, isFirebase = false) => {
-    let cachePeoples = []
-    peoples.forEach((people)=>{
-      let cachePeople = people
-      if (isFirebase) {
-        cachePeople = people.data()
-        cachePeople.refId = people.id
-      } else {
-        cachePeople.refId = ''
-      }
-      
-      cachePeoples.push(cachePeople)
-    })
-
-    props.AddAllPeople(cachePeoples)
-  }
+  };
 
   useEffect(() => {
-    if (FIREBASE_ENABLE) {
-      initData()
-    } else {
-      getLocalJsonData()
-    }
+    initData();
   }, []);
 
   return (
@@ -125,16 +127,16 @@ function App(props) {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route path="/home" element={<Home />} />
-          <Route path="/" element={<People />} >
+          <Route path="/contact" element={<Contact />}>
+            <Route index element={<PeopleList isContact={true}/>} />
+          </Route>
+          <Route path="/favourite" element={<Favourite />}>
+            <Route index element={<PeopleList isFavourite={true}/>} />
+          </Route>
+          <Route path="/" element={<People />}>
             <Route index element={<PeopleList />} />
           </Route>
-          <Route path="/contact" element={<Contact />} >
-            <Route index element={<ContactList />} />
-          </Route>
-          <Route path="/favourite" element={<Favourite />} >
-            <Route index element={<FavouriteList />} />
-          </Route>
-          <Route path="/company" element={<Company />} >
+          <Route path="/company" element={<Company />}>
             <Route index element={<CompanyList />} />
           </Route>
         </Route>
@@ -150,7 +152,7 @@ const mapStateToProps = (state) => ({
 
 function mapDispatchToProps(dispatch) {
   return {
-    AddAllPeople: (peoples) => dispatch(AddAllPeople(peoples))
+    AddAllPeople: (peoples) => dispatch(AddAllPeople(peoples)),
   };
 }
 

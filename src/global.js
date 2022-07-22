@@ -1,4 +1,4 @@
-const FIREBASE_ENABLE = false;
+const FIREBASE_ENABLE = true;
 const FIREBASE_COLLECTION_PEOPLES = "peoples";
 const GRID_COLUMN = 4;
 const COLUMN_SIZE = 12 / GRID_COLUMN;

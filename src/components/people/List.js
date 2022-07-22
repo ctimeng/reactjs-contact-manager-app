@@ -22,15 +22,24 @@ import {
   endAt,
 } from "firebase/firestore/lite";
 import { FIREBASE_COLLECTION_PEOPLES, searchPeoples } from "../../global";
+import SearchBarView from "../SearchBarView";
 
 const List = (props) => {
   const [option, setOption] = useState("1");
-  const [selectedCity, setSelectedCity] = useState("");
+  const [city, setCity] = useState("");
   const [search, setSearch] = useState("");
 
   const db = getFirestore(firebaseApp);
 
-  const filteredData = searchPeoples(props.peoples, search, selectedCity);
+  const filteredData = () => { 
+    const peoples = searchPeoples(props.peoples, search, city)
+    if (props.isContact === true) {
+      return peoples.filter((people) => people.isContact === props.isContact);
+    } else if (props.isFavourite === true) {
+      return peoples.filter((people) => people.isFavourite === props.isFavourite);
+    }
+    return peoples
+  };
 
   const firebaseSearch = async (search) => {
     /*There are no content searches in Firebase need to integrate with ElasticSearch */
@@ -97,77 +106,10 @@ const List = (props) => {
 
   return (
     <div>
-      <form>
-        <div className="row">
-          <div className="col-2">
-            <div className="btn-group btn-group-toggle" data-toggle="buttons">
-              <label className={'btn btn-info '+ (option==="1"?'active':'')}>
-                <input
-                  type="radio"
-                  name="options"
-                  id="option_a1"
-                  autoComplete="off"
-                  checked=""
-                  value="1"
-
-                  onChange={(event) => setOption(event.target.value)}
-                />{" "}
-                <i className="fas fa-th-large"></i>
-              </label>
-              <label className={'btn btn-info '+ (option==="2"?'active':'')}>
-                <input
-                  type="radio"
-                  name="options"
-                  id="option_a2"
-                  autoComplete="off"
-                  value="2"
-                  onChange={(event) => setOption(event.target.value)}
-                />{" "}
-                <i className="fas fa-align-justify"></i>
-              </label>
-            </div>
-          </div>
-          <div className="col-7">
-            <div className="form-group">
-              <div className="input-group">
-                <input
-                  type="search"
-                  className="form-control"
-                  placeholder="Search"
-                  onChange={(event) => setSearch(event.target.value)}
-                />
-                <div className="input-group-append">
-                  <button
-                    type="button"
-                    className="btn btn-default"
-                    onClick={onSearchHandler}
-                  >
-                    <i className="fa fa-search"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col-3">
-            <div className="form-group">
-              <select
-                className="form-control"
-                value={selectedCity}
-                onChange={(event) => setSelectedCity(event.target.value)}
-              >
-                {props.cities.map((city, i) => (
-                  <option value={city} key={i}>
-                    {city}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-        </div>
-      </form>
-      {option==="1" ? (
+      <SearchBarView cities={props.cities} option={option} setOption={setOption} setCity={setCity} setSearch={setSearch}/>
+      {option === "1" ? (
         <ColumnView
-          peoples={filteredData}
+          peoples={filteredData()}
           onAddContact={onAddContact}
           onDeleteContact={onDeleteContact}
           onAddFavourite={onAddFavourite}
@@ -175,12 +117,19 @@ const List = (props) => {
         />
       ) : (
         <RowView
-          peoples={filteredData}
+          peoples={filteredData()}
           onAddContact={onAddContact}
           onDeleteContact={onDeleteContact}
           onAddFavourite={onAddFavourite}
           onDeleteFavourite={onDeleteFavourite}
         />
+      )}
+      {props.peoples.length === 0 ? (
+        <div className="overlay dark">
+          <i className="fas fa-2x fa-sync-alt"></i>
+        </div>
+      ) : (
+        ""
       )}
     </div>
   );

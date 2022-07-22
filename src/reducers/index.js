@@ -24,11 +24,11 @@ const updateFirebase = async(id, fields) => {
 
 export default function variable(state = initialState, action) {
   let index = 0
-  let refId = ''
+  let people = {}
 
   switch (action.type) {
     case ADD_ALL_PEOPLE:
-      let peopleCities = ["All City"];
+      let peopleCities = [];
       action.payload.forEach(function (people, i) {
         if (!peopleCities.includes(people.city)) {
           peopleCities.push(people.city);
@@ -42,10 +42,10 @@ export default function variable(state = initialState, action) {
       };
     case ADD_CONTACT:
       index = getFindIndexById(state.peoples, action.payload)
-      state.peoples[index].isContact = true;
-      refId = state.peoples[index].refId
-      if ( refId !== '') {
-        updateFirebase(refId, { isContact : true })
+      people = state.peoples[index]
+      people.isContact = true
+      if (people.hasOwnProperty('refId') && people.refId !== '') {
+        updateFirebase(people.refId, { isContact : true })
       }
 
       return {
@@ -54,10 +54,10 @@ export default function variable(state = initialState, action) {
       };
     case DELETE_CONTACT:
       index = getFindIndexById(state.peoples, action.payload)
-      state.peoples[index].isContact = false;
-      refId = state.peoples[index].refId
-      if ( refId !== '') {
-        updateFirebase(refId, { isContact : false })
+      people = state.peoples[index]
+      people.isContact = false
+      if (people.hasOwnProperty('refId') && people.refId !== '') {
+        updateFirebase(people.refId, { isContact : true })
       }
 
       return {
@@ -66,10 +66,10 @@ export default function variable(state = initialState, action) {
       };
     case ADD_FAVOURITE:
       index = getFindIndexById(state.peoples, action.payload)
-      state.peoples[index].isFavourite = true;
-      refId = state.peoples[index].refId
-      if ( refId !== '') {
-        updateFirebase(refId, { isFavourite : true })
+      people = state.peoples[index]
+      people.isFavourite = true
+      if (people.hasOwnProperty('refId') && people.refId !== '') {
+        updateFirebase(people.refId, { isFavourite : true })
       }
 
       return {
@@ -78,10 +78,10 @@ export default function variable(state = initialState, action) {
       };
     case DELETE_FAVOURITE:
       index = getFindIndexById(state.peoples, action.payload)
-      state.peoples[index].isFavourite = false;
-      refId = state.peoples[index].refId
-      if ( refId !== '') {
-        updateFirebase(refId, { isFavourite : false })
+      people = state.peoples[index]
+      people.isFavourite = false
+      if (people.hasOwnProperty('refId') && people.refId !== '') {
+        updateFirebase(people.refId, { isFavourite : false })
       }
 
       return {
