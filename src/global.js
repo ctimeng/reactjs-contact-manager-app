@@ -49,7 +49,7 @@ const searchPeoples = (
 };
 
 const getFindIndexById = (peoples, id) => {
-  return peoples.findIndex(people => Number(people.id) === Number(id))
+  return peoples.findIndex(people => people.id === id)
 }
 
 export {

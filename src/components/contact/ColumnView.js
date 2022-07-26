@@ -1,9 +1,8 @@
 import { useMemo } from "react";
-import CardColumnView from "../CardColumnView"
-import { COLUMN_SIZE, gridData} from "../../global";
+import CardColumnView from "../CardColumnView";
+import { COLUMN_SIZE, gridData } from "../../global";
 
 const ColumnView = (props) => {
-
   const peopleRows = useMemo(() => gridData(props.peoples), [props.peoples]);
 
   return (
@@ -11,14 +10,16 @@ const ColumnView = (props) => {
       {peopleRows.map((peopleColumns, i) => (
         <div className="row" key={i}>
           {peopleColumns.map((people) => (
-          <div className={'col-md-'+COLUMN_SIZE} key={people.id}>
-            <CardColumnView 
-              people={people}
-              onAddContact={null}
-              onDeleteContact={props.onDeleteContact}
-              onAddFavourite={null}
-              onDeleteFavourite={null} />
-          </div>
+            <div className={"col-md-" + COLUMN_SIZE} key={people.id}>
+              <CardColumnView
+                people={people}
+                onAddContact={null}
+                onDeleteContact={props.onDeleteContact}
+                onAddFavourite={props.onAddFavourite}
+                onDeleteFavourite={props.onDeleteFavourite}
+                onDeletePeople={null}
+              />
+            </div>
           ))}
         </div>
       ))}

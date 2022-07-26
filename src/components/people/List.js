@@ -2,34 +2,30 @@ import ColumnView from "./ColumnView";
 import RowView from "./RowView";
 import { useState } from "react";
 import { connect } from "react-redux";
-import {
-  AddContact,
-  DeleteContact,
-  AddFavourite,
-  DeleteFavourite,
-} from "../../actions";
-
-import firebaseApp from "../../Firebase";
-import {
-  getFirestore,
-  doc,
-  query,
-  collection,
-  where,
-  getDocs,
-  orderBy,
-  startAt,
-  endAt,
-} from "firebase/firestore/lite";
 import { FIREBASE_COLLECTION_PEOPLES, searchPeoples } from "../../global";
 import SearchBarView from "../SearchBarView";
+import firebaseApp from '../../Firebase';
+import { doc, getFirestore, updateDoc, deleteDoc } from "firebase/firestore";
 
 const List = (props) => {
   const [option, setOption] = useState("1");
   const [city, setCity] = useState("");
   const [search, setSearch] = useState("");
+  const [selectedId, setSelectedId] = useState("");
+  const [loading, setLoading] = useState(0);
 
   const db = getFirestore(firebaseApp);
+
+  const updateFirebase = async(id, fields, loading) => {
+    setLoading(loading)
+    setSelectedId(id)
+    const noteRef = doc(db, FIREBASE_COLLECTION_PEOPLES, id);
+    await updateDoc(noteRef, fields).catch((err) => {
+      console.error(err)
+    }).finally(() => {
+      setLoading(0)
+    })
+  }
 
   const filteredData = () => { 
     const peoples = searchPeoples(props.peoples, search, city)
@@ -39,70 +35,50 @@ const List = (props) => {
       return peoples.filter((people) => people.isFavourite === props.isFavourite);
     }
     return peoples
-  };
+  }
 
-  const firebaseSearch = async (search) => {
-    /*There are no content searches in Firebase need to integrate with ElasticSearch */
-    /*const q = query(collection(db, FIREBASE_COLLECTION_PEOPLES), where("name", "==", search));
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      // doc.data() is never undefined for query doc snapshots
-      console.log(doc.id, " => ", doc.data());
-    });
-    if (querySnapshot.exists) {
-      console.log("the document exists");
-    } else {
-      console.log("the document not exists");
-    }*/
-
-    /*const q = query(
-        collection(db, FIREBASE_COLLECTION_PEOPLES),
-        orderBy("name"),
-        startAt(`%${search}%`),
-        endAt(search+'\uf8ff')
-      )*/
-
-    const q = query(
-      collection(db, FIREBASE_COLLECTION_PEOPLES),
-      orderBy("name"),
-      startAt(search),
-      endAt("\uf8ff")
-    );
-
-    /*const q = query(
-      collection(db, FIREBASE_COLLECTION_PEOPLES),
-      orderBy("name"),
-      where("name", ">=", search),
-      where("name", "<=", search + "\uf8ff")
-    );*/
-
-    const querySnapshot = await getDocs(q);
-    console.log(querySnapshot.docs);
-  };
-
-  const onAddContact = (event, id) => {
+  const onAddContact = async(event, id) => {
     event.preventDefault();
-    props.AddContact(id);
+    updateFirebase(id, {isContact: true}, 1);
   };
 
   const onDeleteContact = (event, id) => {
-    event.preventDefault();
-    props.DeleteContact(id);
-  };
+    event.preventDefault()
+    updateFirebase(id, {isContact: false}, 1);
+  }
 
   const onAddFavourite = (event, id) => {
     event.preventDefault();
-    props.AddFavourite(id);
-  };
+    updateFirebase(id, {isFavourite: true}, 2);
+  }
 
   const onDeleteFavourite = (event, id) => {
     event.preventDefault();
-    props.DeleteFavourite(id);
+    updateFirebase(id, {isFavourite: false}, 2);
   };
 
-  const onSearchHandler = () => {
-    firebaseSearch(search);
+  const onDeletePeople = async(event, id) => {
+    event.preventDefault();
+    const people = props.peoples.filter(people => {
+      return people.id === id
+    })[0]
+
+    if (
+      window.confirm(
+        "Are you sure, you want to delete [" + people.name + "] !"
+      )
+    ) {
+      setLoading(3)
+      setSelectedId(id)
+      const noteRef = doc(db, FIREBASE_COLLECTION_PEOPLES, id);
+      await deleteDoc(noteRef).catch((err) => {
+        console.error(err)
+      }).finally(() => {
+        setLoading(0)
+      })
+    }
   };
+  
 
   return (
     <div>
@@ -110,23 +86,29 @@ const List = (props) => {
       {option === "1" ? (
         <ColumnView
           peoples={filteredData()}
+          selectedId={selectedId}
+          loading={loading}
           onAddContact={onAddContact}
           onDeleteContact={onDeleteContact}
           onAddFavourite={onAddFavourite}
           onDeleteFavourite={onDeleteFavourite}
+          onDeletePeople={onDeletePeople}
         />
       ) : (
         <RowView
           peoples={filteredData()}
+          loading={loading}
+          selectedId={selectedId}
           onAddContact={onAddContact}
           onDeleteContact={onDeleteContact}
           onAddFavourite={onAddFavourite}
           onDeleteFavourite={onDeleteFavourite}
+          onDeletePeople={onDeletePeople}
         />
       )}
       {props.peoples.length === 0 ? (
         <div className="overlay dark">
-          <i className="fas fa-2x fa-sync-alt"></i>
+          <i className="fas fa-sync fa-spin"></i>
         </div>
       ) : (
         ""
@@ -139,13 +121,4 @@ const mapStateToProps = (state) => ({
   ...state,
 });
 
-function mapDispatchToProps(dispatch) {
-  return {
-    AddContact: (id) => dispatch(AddContact(id)),
-    DeleteContact: (id) => dispatch(DeleteContact(id)),
-    AddFavourite: (id) => dispatch(AddFavourite(id)),
-    DeleteFavourite: (id) => dispatch(DeleteFavourite(id)),
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(List);
+export default connect(mapStateToProps)(List);

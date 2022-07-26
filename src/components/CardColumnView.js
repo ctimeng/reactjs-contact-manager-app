@@ -1,11 +1,16 @@
 import SocialIconView from "./SocialIconView";
+import { Link } from "react-router-dom";
 
 const CardColumnView = ({
   people,
+  selectedId = 0,
+  loading = 0,
   onAddContact,
   onDeleteContact,
   onAddFavourite,
   onDeleteFavourite,
+  onDeletePeople,
+  onEditPeople
 }) => {
   const myStyle = {
     borderBottom: 0,
@@ -26,7 +31,7 @@ const CardColumnView = ({
         <h5 className="widget-user-desc">{people.position}</h5>
         <ul className="nav flex-column">
           <li className="nav-item pt-2 pb-2" style={myStyle}>
-            {Object.keys(people.social_networks).map((key, index) => (
+            {Object.keys(people.social_networks).sort().map((key, index) => (
               <a
                 href={people.social_networks[key]}
                 className="btn btn-sm btn-outline-primary ml-2"
@@ -56,7 +61,12 @@ const CardColumnView = ({
                   className="btn btn-sm btn-primary ml-2 rounded-pill"
                   onClick={(e) => onAddContact(e, `${people.id}`)}
                 >
-                  ADD TO CONTACTS
+                  ADD TO CONTACTS{" "}
+                  {people.id === selectedId && loading === 1 ? (
+                    <i className="fas fa-spinner fa-spin"></i>
+                  ) : (
+                    ""
+                  )}
                 </a>
               ) : (
                 <a
@@ -64,7 +74,12 @@ const CardColumnView = ({
                   className="btn btn-sm btn-danger ml-2 rounded-pill"
                   onClick={(e) => onDeleteContact(e, `${people.id}`)}
                 >
-                  DELETE FROM CONTACTS
+                  DELETE FROM CONTACTS{" "}
+                  {people.id === selectedId && loading === 1 ? (
+                    <i className="fas fa-spinner fa-spin"></i>
+                  ) : (
+                    ""
+                  )}
                 </a>
               )}
             </span>
@@ -82,7 +97,12 @@ const CardColumnView = ({
                   className="btn btn-sm btn-primary ml-2 mt-2 rounded-pill"
                   onClick={(e) => onAddFavourite(e, `${people.id}`)}
                 >
-                  ADD TO FAVOURITES
+                  ADD TO FAVOURITES{" "}
+                  {people.id === selectedId && loading === 2 ? (
+                    <i className="fas fa-spinner fa-spin"></i>
+                  ) : (
+                    ""
+                  )}
                 </a>
               ) : (
                 <a
@@ -90,9 +110,46 @@ const CardColumnView = ({
                   className="btn btn-sm btn-danger ml-2 mt-2 rounded-pill"
                   onClick={(e) => onDeleteFavourite(e, `${people.id}`)}
                 >
-                  DELETE FROM FAVOURITES
+                  DELETE FROM FAVOURITES{" "}
+                  {people.id === selectedId && loading === 2 ? (
+                    <i className="fas fa-spinner fa-spin"></i>
+                  ) : (
+                    ""
+                  )}
                 </a>
               )}
+            </span>
+            <span style={{
+                display:
+                onEditPeople === null
+                    ? "none"
+                    : "block",
+              }}>
+              <Link
+                to={{ pathname: `/contact/${people.id}/edit` }}
+                className="btn btn-sm btn-info ml-2 mt-2 rounded-pill"
+              >
+                Edit
+              </Link>
+            </span>
+            <span style={{
+                display:
+                onDeletePeople === null
+                    ? "none"
+                    : "block",
+              }}>
+            <a
+                  href="#/"
+                  className="btn btn-sm btn-danger ml-2 mt-2 rounded-pill"
+                  onClick={(e) => onDeletePeople(e, `${people.id}`)}
+                >
+                  DELETE{" "}
+                  {people.id === selectedId && loading === 3 ? (
+                    <i className="fas fa-spinner fa-spin"></i>
+                  ) : (
+                    ""
+                  )}
+                </a>
             </span>
           </li>
         </ul>

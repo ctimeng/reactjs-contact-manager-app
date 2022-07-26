@@ -55,7 +55,7 @@ const Layout = ({ setToken }) => {
                 <NavLink
                   className="nav-link"
                   activeclassname="is-active"
-                  to="/home"
+                  to="/"
                 >
                   <i className="nav-icon fas fa-home"></i>
                   <p>HOME</p>
@@ -85,7 +85,7 @@ const Layout = ({ setToken }) => {
                 <NavLink
                   className="nav-link"
                   activeclassname="is-active"
-                  to="/"
+                  to="/people"
                 >
                   <i className="nav-icon fas fa-user"></i>
                   <p>PEOPLE</p>

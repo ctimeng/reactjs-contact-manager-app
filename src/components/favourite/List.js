@@ -2,100 +2,63 @@ import ColumnView from "./ColumnView";
 import RowView from "./RowView";
 import { useState } from "react";
 import { connect } from "react-redux";
-import { DeleteFavourite } from "../../actions";
-import { searchPeoples } from "../../global";
+import { searchPeoples, FIREBASE_COLLECTION_PEOPLES } from "../../global";
+import SearchBarView from "../SearchBarView";
+import firebaseApp from '../../Firebase';
+import { doc, getFirestore, updateDoc } from "firebase/firestore";
 
 const List = (props) => {
-  const [isColumn, setIsColumn] = useState(true);
-  const [selectedCity, setSelectedCity] = useState("");
+  const [option, setOption] = useState("1");
+  const [city, setCity] = useState("");
   const [search, setSearch] = useState("");
+  const [selectedId, setSelectedId] = useState("");
+  const [loading, setLoading] = useState(0);
 
-  const filteredData = searchPeoples(
-    props.peoples,
-    search,
-    selectedCity
-  ).filter((people) => people.isFavourite === true);
+  const db = getFirestore(firebaseApp);
 
-  const columnViewHandler = (e) => {
-    setIsColumn(true);
-  };
+  const filteredData = searchPeoples(props.peoples, search, city).filter(
+    (people) => people.isFavourite === true
+  );
 
-  const rowViewHandler = (e) => {
-    setIsColumn(false);
-  };
-
-  const handleChange = (e) => {
-    setSelectedCity(e.target.value);
-  };
+  const updateFirebase = async(id, fields, loading) => {
+    setLoading(loading)
+    setSelectedId(id)
+    const noteRef = doc(db, FIREBASE_COLLECTION_PEOPLES, id);
+    await updateDoc(noteRef, fields).catch((err) => {
+      console.error(err)
+    }).finally(() => {
+      setLoading(0)
+    })
+  }
 
   const onDeleteFavourite = (event, id) => {
     event.preventDefault();
-    props.DeleteFavourite(id);
+    updateFirebase(id, {isFavourite: false}, 2);
   };
 
   return (
     <div>
-      <form>
-        <div className="row">
-          <div className="col-2">
-            <div className="btn-group">
-              <button
-                type="button"
-                className="btn btn-info active"
-                onClick={columnViewHandler}
-              >
-                <i className="fas fa-th-large"></i>
-              </button>
-              <button
-                type="button"
-                className="btn btn-info"
-                onClick={rowViewHandler}
-              >
-                <i className="fas fa-align-justify"></i>
-              </button>
-            </div>
-          </div>
-          <div className="col-7">
-            <div className="form-group">
-              <div className="input-group">
-                <input
-                  type="search"
-                  className="form-control"
-                  placeholder="Search"
-                  onChange={(event) => setSearch(event.target.value)}
-                />
-                <div className="input-group-append">
-                  <button type="submit" className="btn btn-default">
-                    <i className="fa fa-search"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col-3">
-            <div className="form-group">
-              <select
-                className="form-control"
-                value={selectedCity}
-                onChange={handleChange}
-              >
-                {props.cities.map((city, i) => (
-                  <option value={city} key={i}>
-                    {city}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-        </div>
-      </form>
-      {isColumn ? (
+      <SearchBarView
+        cities={props.cities}
+        option={option}
+        setOption={setOption}
+        setCity={setCity}
+        setSearch={setSearch}
+      />
+      {option === "1" ? (
         <ColumnView
           peoples={filteredData}
+          selectedId={selectedId}
+          loading={loading}
           onDeleteFavourite={onDeleteFavourite}
         />
       ) : (
-        <RowView peoples={filteredData} onDeleteFavourite={onDeleteFavourite} />
+        <RowView
+          peoples={filteredData}
+          selectedId={selectedId}
+          loading={loading}
+          onDeleteFavourite={onDeleteFavourite}
+        />
       )}
     </div>
   );
@@ -105,10 +68,4 @@ const mapStateToProps = (state) => ({
   ...state,
 });
 
-function mapDispatchToProps(dispatch) {
-  return {
-    DeleteFavourite: (index) => dispatch(DeleteFavourite(index)),
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(List);
+export default connect(mapStateToProps)(List);

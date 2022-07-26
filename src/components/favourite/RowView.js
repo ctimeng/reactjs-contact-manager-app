@@ -10,7 +10,9 @@ const RowView = (props) => {
               onAddContact={null}
               onDeleteContact={null}
               onAddFavourite={null}
-              onDeleteFavourite={props.onDeleteFavourite}/>
+              onDeleteFavourite={props.onDeleteFavourite}
+              onEditPeople={null}
+              onDeletePeople={null}/>
         </li>
       ))}
     </ul>
