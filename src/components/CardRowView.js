@@ -14,7 +14,7 @@ const CardRowView = ({
 }) => {
   return (
     <div className="row">
-      <div className="col-md-2">
+      <div className="col-md-2 col-sm-12">
         <img
           src={people.avatar}
           alt={people.name}
@@ -22,7 +22,7 @@ const CardRowView = ({
           style={{ width: "120px", height: "120px", margin: "19px" }}
         />
       </div>
-      <div className="col-md-3">
+      <div className="col-md-3 col-sm-12">
         <ul className="nav flex-column">
           <li className="nav-item pt-2 pb-2">
             <h5>{people.name}</h5>
@@ -43,7 +43,7 @@ const CardRowView = ({
           <li className="nav-item pt-2 pb-2">{people.city}</li>
         </ul>
       </div>
-      <div className="col-md-6">
+      <div className="col-md-6 col-sm-12">
         <div className="row">
           <div
             className="col-sm-12"
@@ -109,7 +109,7 @@ const CardRowView = ({
                 to={{ pathname: `/contact/${people.id}/edit` }}
                 className="btn btn-sm btn-info ml-2 mt-2 rounded-pill"
               >
-                Edit
+                EDIT CONTACT
               </Link>
           </div>
           <div className="col-sm-12" style={{
@@ -123,7 +123,7 @@ const CardRowView = ({
                   className="btn btn-sm btn-danger ml-2 mt-2 rounded-pill"
                   onClick={(e) => onDeletePeople(e, `${people.id}`)}
                 >
-                  DELETE{" "}
+                  DELETE PEOPLE
                   {people.id === selectedId && loading === 3 ? (
                     <i className="fas fa-spinner fa-spin"></i>
                   ) : (

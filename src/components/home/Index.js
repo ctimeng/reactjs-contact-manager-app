@@ -48,7 +48,7 @@ const Index = (props) => {
           </div>
 
           <div className="col-lg-3 col-6">
-            <div className="small-box bg-danger">
+            <div className="small-box bg-warning">
               <div className="inner">
                 <h3>{totalCompany()}</h3>
                 <p>Company</p>
@@ -78,7 +78,7 @@ const Index = (props) => {
           </div>
 
           <div className="col-lg-3 col-6">
-            <div className="small-box bg-warning">
+            <div className="small-box bg-danger">
               <div className="inner">
                 <h3>{totalFavourite()}</h3>
                 <p>Favourite</p>

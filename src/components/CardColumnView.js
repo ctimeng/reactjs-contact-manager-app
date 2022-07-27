@@ -129,7 +129,7 @@ const CardColumnView = ({
                 to={{ pathname: `/contact/${people.id}/edit` }}
                 className="btn btn-sm btn-info ml-2 mt-2 rounded-pill"
               >
-                Edit
+                EDIT CONTACT
               </Link>
             </span>
             <span style={{
@@ -143,7 +143,7 @@ const CardColumnView = ({
                   className="btn btn-sm btn-danger ml-2 mt-2 rounded-pill"
                   onClick={(e) => onDeletePeople(e, `${people.id}`)}
                 >
-                  DELETE{" "}
+                  DELETE PEOPLE
                   {people.id === selectedId && loading === 3 ? (
                     <i className="fas fa-spinner fa-spin"></i>
                   ) : (
