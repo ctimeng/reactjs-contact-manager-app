@@ -1,4 +1,4 @@
-import CardRowView from "../CardRowView";
+import CardRowView from "../custom/CardRowView";
 
 const RowView = (props) => {
   return (

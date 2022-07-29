@@ -1,34 +1,52 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
-const SearchBarView = ({ cities, option, setOption, setCity, setSearch }) => {
+const DISPLAY_COLUMN = "1"
+const DISPLAY_ROW = "2"
+
+const FilterData = () => {
+  const [option, setOption] = useState("1")
+  const [city, setCity] = useState("")
+  const [search, setSearch] = useState("")
+
+  return {
+      option,
+      city,
+      search,
+      setOption,
+      setCity,
+      setSearch
+  }
+}
+
+const SearchBarView = ({cities, filter}) => {
+  const {option, city, search, setOption, setSearch, setCity} = filter;
   return (
     <form>
       <div className="row">
         <div className="col-md-2 col-sm-12 mt-2">
           <div className="btn-group btn-group-toggle" data-toggle="buttons">
             <label
-              className={"btn btn-info " + (option === "1" ? "active" : "")}
+              className={"btn btn-info " + (option === DISPLAY_COLUMN ? "active" : "")}
             >
               <input
                 type="radio"
                 name="options"
-                id="option_a1"
                 autoComplete="off"
                 checked=""
-                value="1"
+                value={DISPLAY_COLUMN}
                 onChange={(event) => setOption(event.target.value)}
               />{" "}
               <i className="fas fa-th-large"></i>
             </label>
             <label
-              className={"btn btn-info " + (option === "2" ? "active" : "")}
+              className={"btn btn-info " + (option === DISPLAY_ROW ? "active" : "")}
             >
               <input
                 type="radio"
                 name="options"
-                id="option_a2"
                 autoComplete="off"
-                value="2"
+                value={DISPLAY_ROW}
                 onChange={(event) => setOption(event.target.value)}
               />{" "}
               <i className="fas fa-align-justify"></i>
@@ -80,4 +98,9 @@ const SearchBarView = ({ cities, option, setOption, setCity, setSearch }) => {
   );
 };
 
-export default SearchBarView;
+export {
+  FilterData,
+  SearchBarView,
+  DISPLAY_COLUMN,
+  DISPLAY_ROW
+}

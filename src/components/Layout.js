@@ -1,10 +1,6 @@
 import { Outlet, NavLink } from "react-router-dom";
-import { useEffect } from "react";
 
-const Layout = ({ setToken }) => {
-  useEffect(() => {
-    document.body.classList.remove("login-page");
-  });
+const Layout = () => {
 
   const handleLogout = async (e) => {
     e.preventDefault();

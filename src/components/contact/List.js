@@ -3,20 +3,18 @@ import RowView from "./RowView";
 import { useState } from "react";
 import { connect } from "react-redux";
 import { searchPeoples, FIREBASE_COLLECTION_PEOPLES } from "../../global";
-import SearchBarView from "../SearchBarView";
+import {SearchBarView, FilterData, DISPLAY_COLUMN} from "../custom/SearchBarView";
 import firebaseApp from "../../Firebase";
 import { doc, getFirestore, updateDoc } from "firebase/firestore";
 
 const List = (props) => {
-  const [option, setOption] = useState("1");
-  const [city, setCity] = useState("");
-  const [search, setSearch] = useState("");
   const [selectedId, setSelectedId] = useState("");
   const [loading, setLoading] = useState(0);
+  const filter = FilterData()
 
   const db = getFirestore(firebaseApp);
 
-  const filteredData = searchPeoples(props.peoples, search, city).filter(
+  const filteredData = searchPeoples(props.peoples, filter.search, filter.city).filter(
     (people) => people.isContact === true
   );
 
@@ -52,12 +50,9 @@ const List = (props) => {
     <div>
       <SearchBarView
         cities={props.cities}
-        option={option}
-        setOption={setOption}
-        setCity={setCity}
-        setSearch={setSearch}
+        filter={filter}
       />
-      {option === "1" ? (
+      {filter.option === DISPLAY_COLUMN ? (
         <ColumnView
           peoples={filteredData}
           onDeleteContact={onDeleteContact}

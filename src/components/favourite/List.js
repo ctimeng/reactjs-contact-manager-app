@@ -2,21 +2,19 @@ import ColumnView from "./ColumnView";
 import RowView from "./RowView";
 import { useState } from "react";
 import { connect } from "react-redux";
-import { searchPeoples, FIREBASE_COLLECTION_PEOPLES } from "../../global";
-import SearchBarView from "../SearchBarView";
+import { FIREBASE_COLLECTION_PEOPLES, searchPeoples } from "../../global";
+import {SearchBarView, FilterData, DISPLAY_COLUMN} from "../custom/SearchBarView";
 import firebaseApp from '../../Firebase';
 import { doc, getFirestore, updateDoc } from "firebase/firestore";
 
 const List = (props) => {
-  const [option, setOption] = useState("1");
-  const [city, setCity] = useState("");
-  const [search, setSearch] = useState("");
   const [selectedId, setSelectedId] = useState("");
   const [loading, setLoading] = useState(0);
+  const filter = FilterData();
 
   const db = getFirestore(firebaseApp);
 
-  const filteredData = searchPeoples(props.peoples, search, city).filter(
+  const filteredPeoples = searchPeoples(props.peoples, filter.search, filter.city).filter(
     (people) => people.isFavourite === true
   );
 
@@ -38,23 +36,17 @@ const List = (props) => {
 
   return (
     <div>
-      <SearchBarView
-        cities={props.cities}
-        option={option}
-        setOption={setOption}
-        setCity={setCity}
-        setSearch={setSearch}
-      />
-      {option === "1" ? (
+      <SearchBarView cities={props.cities} filter={filter}/>
+      {filter.option === DISPLAY_COLUMN ? (
         <ColumnView
-          peoples={filteredData}
+          peoples={filteredPeoples}
           selectedId={selectedId}
           loading={loading}
           onDeleteFavourite={onDeleteFavourite}
         />
       ) : (
         <RowView
-          peoples={filteredData}
+          peoples={filteredPeoples}
           selectedId={selectedId}
           loading={loading}
           onDeleteFavourite={onDeleteFavourite}

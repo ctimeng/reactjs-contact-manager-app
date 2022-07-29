@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import CardColumnView from "../CardColumnView";
+import CardColumnView from "../custom/CardColumnView";
 import { COLUMN_SIZE, gridData } from "../../global";
 
 const ColumnView = (props) => {
