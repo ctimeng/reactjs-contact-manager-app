@@ -1,3 +1,4 @@
+import React from 'react';
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "admin-lte/dist/css/adminlte.min.css";
@@ -46,7 +47,7 @@ function App(props) {
   const initData = async() => {
     const q = query(collection(db, FIREBASE_COLLECTION_PEOPLES), orderBy('name'))
     onSnapshot(q, (querySnapshot) => {
-      let peoples = []
+      let peoples: any[] = []
       querySnapshot.docs.forEach(function(doc){
         let people = doc.data()
         people.id = doc.id
