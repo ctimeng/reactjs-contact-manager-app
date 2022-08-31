@@ -10,7 +10,17 @@ const CardColumnView = ({
   onAddFavourite,
   onDeleteFavourite,
   onDeletePeople,
-  onEditPeople
+  onEditPeople,
+}: {
+  people: any;
+  selectedId?: Number;
+  loading?: Number;
+  onAddContact: any;
+  onDeleteContact: any;
+  onAddFavourite: any;
+  onDeleteFavourite: any;
+  onDeletePeople: any;
+  onEditPeople?: any;
 }) => {
   const myStyle = {
     borderBottom: 0,
@@ -31,17 +41,19 @@ const CardColumnView = ({
         <h5 className="widget-user-desc">{people.position}</h5>
         <ul className="nav flex-column">
           <li className="nav-item pt-2 pb-2" style={myStyle}>
-            {Object.keys(people.social_networks).sort().map((key, index) => (
-              <a
-                href={people.social_networks[key]}
-                className="btn btn-sm btn-outline-primary ml-2"
-                key={index}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <SocialIconView social={key} />
-              </a>
-            ))}
+            {Object.keys(people.social_networks)
+              .sort()
+              .map((key, index) => (
+                <a
+                  href={people.social_networks[key]}
+                  className="btn btn-sm btn-outline-primary ml-2"
+                  key={index}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <SocialIconView social={key} />
+                </a>
+              ))}
           </li>
           <li className="nav-item pt-2 pb-2" style={myStyle}>
             <span className="badge bg-success">{people.city}</span>
@@ -119,12 +131,11 @@ const CardColumnView = ({
                 </a>
               )}
             </span>
-            <span style={{
-                display:
-                onEditPeople === null
-                    ? "none"
-                    : "block",
-              }}>
+            <span
+              style={{
+                display: onEditPeople === null ? "none" : "block",
+              }}
+            >
               <Link
                 to={{ pathname: `/contact/${people.id}/edit` }}
                 className="btn btn-sm btn-info ml-2 mt-2 rounded-pill"
@@ -132,24 +143,23 @@ const CardColumnView = ({
                 EDIT CONTACT
               </Link>
             </span>
-            <span style={{
-                display:
-                onDeletePeople === null
-                    ? "none"
-                    : "block",
-              }}>
-            <a
-                  href="#/"
-                  className="btn btn-sm btn-danger ml-2 mt-2 rounded-pill"
-                  onClick={(e) => onDeletePeople(e, `${people.id}`)}
-                >
-                  DELETE PEOPLE
-                  {people.id === selectedId && loading === 3 ? (
-                    <i className="fas fa-spinner fa-spin"></i>
-                  ) : (
-                    ""
-                  )}
-                </a>
+            <span
+              style={{
+                display: onDeletePeople === null ? "none" : "block",
+              }}
+            >
+              <a
+                href="#/"
+                className="btn btn-sm btn-danger ml-2 mt-2 rounded-pill"
+                onClick={(e) => onDeletePeople(e, `${people.id}`)}
+              >
+                DELETE PEOPLE
+                {people.id === selectedId && loading === 3 ? (
+                  <i className="fas fa-spinner fa-spin"></i>
+                ) : (
+                  ""
+                )}
+              </a>
             </span>
           </li>
         </ul>
@@ -158,4 +168,4 @@ const CardColumnView = ({
   );
 };
 
-export default CardColumnView;
+export default CardColumnView

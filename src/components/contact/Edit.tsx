@@ -7,14 +7,30 @@ import {
   getFirestore,
   getDoc,
   doc,
-  updateDoc
+  updateDoc,
+  Firestore
 } from "firebase/firestore";
 
-function Edit(props) {
+type FormValues = {
+  name: string;
+  city: string;
+  company: string;
+  position: string;
+  avatar: string;
+  social_networks: {
+    facebook: string;
+    twitter: string;
+    instagram: string;
+    linkedin: string;
+    skype: string;
+  }
+};
+
+function Edit(props: any) {
 
   const navigate = useNavigate();
-  const params = useParams();
-  const db = getFirestore(firebaseApp);
+  const params: any = useParams();
+  const db: Firestore = getFirestore(firebaseApp);
   const [loading, setLoading] = useState(false);
   const [people, setPeople] = useState({});
 
@@ -23,7 +39,7 @@ function Edit(props) {
     handleSubmit,
     formState: { errors },
     reset
-  } = useForm({
+  } = useForm<FormValues>({
     defaultValues: useMemo(() => {
       return people;
     }, [people]),
@@ -34,9 +50,9 @@ function Edit(props) {
   };
 
   const URL_REGEX =
-    /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi;
+    /[(http(s)?)://(www.)?a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/gi;
 
-  const onSave = async(formData, e) => {
+  const onSave = async(formData: any, e: any) => {
     e.preventDefault();
     setLoading(true)
     formData.isContact = true
@@ -55,7 +71,7 @@ function Edit(props) {
     setLoading(true)
     const peopleDocRef = doc(db, FIREBASE_COLLECTION_PEOPLES, params.id)
     const docSnap =  await getDoc(peopleDocRef);
-    setPeople(docSnap.data())
+    setPeople(docSnap.data()!)
     reset(docSnap.data())
     setLoading(false)
   } 
@@ -142,7 +158,7 @@ function Edit(props) {
                 })}
               />
             </div>
-            {errors.facebook && <span style={errorStyle}>Invalid URL</span>}
+            {errors.social_networks?.facebook && <span style={errorStyle}>Invalid URL</span>}
             <div className="mb-3">
               {" "}
               <input
@@ -155,7 +171,7 @@ function Edit(props) {
                 })}
               />
             </div>
-            {errors.twitter && <span style={errorStyle}>Invalid URL</span>}
+            {errors.social_networks?.twitter && <span style={errorStyle}>Invalid URL</span>}
             <div className="mb-3">
               <input
                 type="text"
@@ -167,7 +183,7 @@ function Edit(props) {
                 })}
               />
             </div>
-            {errors.instagram && <span style={errorStyle}>Invalid URL</span>}
+            {errors.social_networks?.instagram && <span style={errorStyle}>Invalid URL</span>}
             <div className="mb-3">
               <input
                 type="text"
@@ -179,7 +195,7 @@ function Edit(props) {
                 })}
               />
             </div>
-            {errors.instagram && <span style={errorStyle}>Invalid URL</span>}
+            {errors.social_networks?.instagram && <span style={errorStyle}>Invalid URL</span>}
             <div className="mb-3">
               <input
                 type="text"
@@ -188,7 +204,7 @@ function Edit(props) {
                 {...register("social_networks.skype", { required: false, pattern: URL_REGEX })}
               />
             </div>
-            {errors.skype && <span style={errorStyle}>Invalid URL</span>}
+            {errors.social_networks?.skype && <span style={errorStyle}>Invalid URL</span>}
           </fieldset>
         </div>
         <div className="card-footer">
@@ -207,4 +223,4 @@ function Edit(props) {
   );
 }
 
-export default Edit;
+export default Edit

@@ -8,11 +8,11 @@ const initialState = {
   cities: []
 };
 
-export default function variable(state = initialState, action) {
+export default function variable(state = initialState, action: any) {
   switch (action.type) {
     case ADD_ALL_PEOPLE:
-      let peopleCities = [];
-      action.payload.forEach(function (people, i) {
+      let peopleCities: any = [];
+      action.payload.forEach(function (people: any) {
         if (!peopleCities.includes(people.city)) {
           peopleCities.push(people.city);
         }

@@ -2,7 +2,7 @@ import { Outlet, NavLink } from "react-router-dom";
 
 const Layout = () => {
 
-  const handleLogout = async (e) => {
+  const handleLogout = async (e: any) => {
     e.preventDefault();
   };
 
@@ -49,8 +49,9 @@ const Layout = () => {
             >
               <li className="nav-item">
                 <NavLink
-                  className="nav-link"
-                  activeclassname="is-active"
+                  className={isActive =>
+                    "nav-link" + (!isActive ? " unselected" : "")
+                  }
                   to="/"
                 >
                   <i className="nav-icon fas fa-home"></i>
@@ -59,8 +60,9 @@ const Layout = () => {
               </li>
               <li className="nav-item">
                 <NavLink
-                  className="nav-link"
-                  activeclassname="is-active"
+                   className={isActive =>
+                    "nav-link" + (!isActive ? " unselected" : "")
+                  }
                   to="/contact"
                 >
                   <i className="nav-icon fas fa-address-book"></i>
@@ -69,8 +71,9 @@ const Layout = () => {
               </li>
               <li className="nav-item">
                 <NavLink
-                  className="nav-link"
-                  activeclassname="is-active"
+                   className={isActive =>
+                    "nav-link" + (!isActive ? " unselected" : "")
+                  }
                   to="/favourite"
                 >
                   <i className="nav-icon fas fa-heart"></i>
@@ -79,8 +82,9 @@ const Layout = () => {
               </li>
               <li className="nav-item">
                 <NavLink
-                  className="nav-link"
-                  activeclassname="is-active"
+                   className={isActive =>
+                    "nav-link" + (!isActive ? " unselected" : "")
+                  }
                   to="/people"
                 >
                   <i className="nav-icon fas fa-user"></i>
@@ -89,8 +93,9 @@ const Layout = () => {
               </li>
               <li className="nav-item">
                 <NavLink
-                  className="nav-link"
-                  activeclassname="is-active"
+                   className={isActive =>
+                    "nav-link" + (!isActive ? " unselected" : "")
+                  }
                   to="/company"
                 >
                   <i className="nav-icon fas fa-shopping-bag"></i>

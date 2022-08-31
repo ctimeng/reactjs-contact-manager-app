@@ -1,29 +1,29 @@
 import { connect } from "react-redux";
 import { NavLink } from "react-router-dom";
 
-const Index = (props) => {
+const Index = (props: any) => {
   const totalContact = () => {
     const contacts = props.peoples.filter(
-      (people) => people.isContact === true
+      (people: any) => people.isContact === true
     );
     return contacts.length;
   };
 
   const totalFavourite = () => {
     const favourites = props.peoples.filter(
-      (people) => people.isFavourite === true
+      (people: any) => people.isFavourite === true
     );
     return favourites.length;
   };
 
   const totalCompany = () => {
     const companies = props.peoples
-      .map((people) => people["company"])
+      .map((people: any) => people["company"])
       // store the keys of the unique objects
-      .map((people, index, final) => final.indexOf(people) === index && index)
+      .map((people: any, index: number, final: any) => final.indexOf(people) === index && index)
       // eliminate the dead keys & store unique objects
-      .filter((people) => props.peoples[people])
-      .map((people) => props.peoples[people]);
+      .filter((people: any) => props.peoples[people])
+      .map((people: any) => props.peoples[people]);
 
     return companies.length;
   };
@@ -97,7 +97,7 @@ const Index = (props) => {
   );
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: any) => ({
   ...state,
 });
 

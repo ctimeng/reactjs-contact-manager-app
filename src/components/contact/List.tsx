@@ -7,7 +7,7 @@ import {SearchBarView, FilterData, DISPLAY_COLUMN} from "../custom/SearchBarView
 import firebaseApp from "../../Firebase";
 import { doc, getFirestore, updateDoc } from "firebase/firestore";
 
-const List = (props) => {
+const List = (props: any) => {
   const [selectedId, setSelectedId] = useState("");
   const [loading, setLoading] = useState(0);
   const filter = FilterData()
@@ -18,7 +18,7 @@ const List = (props) => {
     (people) => people.isContact === true
   );
 
-  const updateFirebase = async (id, fields, loading) => {
+  const updateFirebase = async (id: string, fields: object, loading: number) => {
     setLoading(loading);
     setSelectedId(id);
     const noteRef = doc(db, FIREBASE_COLLECTION_PEOPLES, id);
@@ -31,17 +31,17 @@ const List = (props) => {
       });
   };
 
-  const onDeleteContact = (event, id) => {
+  const onDeleteContact = (event: any, id: string) => {
     event.preventDefault();
     updateFirebase(id, { isContact: false }, 1);
   };
 
-  const onAddFavourite = (event, id) => {
+  const onAddFavourite = (event: any, id: string) => {
     event.preventDefault();
     updateFirebase(id, { isFavourite: true }, 2);
   };
 
-  const onDeleteFavourite = (event, id) => {
+  const onDeleteFavourite = (event: any, id: string) => {
     event.preventDefault();
     updateFirebase(id, { isFavourite: false }, 2);
   };
@@ -75,7 +75,7 @@ const List = (props) => {
   );
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: any) => ({
   ...state,
 });
 

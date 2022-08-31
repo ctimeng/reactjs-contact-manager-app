@@ -9,7 +9,22 @@ import {
   addDoc
 } from "firebase/firestore";
 
-function Create(props) {
+type FormValues = {
+  name: string;
+  city: string;
+  company: string;
+  position: string;
+  avatar: string;
+  social_networks: {
+    facebook: string;
+    twitter: string;
+    instagram: string;
+    linkedin: string;
+    skype: string;
+  }
+};
+
+function Create(props: any) {
 
   const navigate = useNavigate();
   const db = getFirestore(firebaseApp);
@@ -19,16 +34,16 @@ function Create(props) {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm<FormValues>();
 
   const errorStyle = {
     color: "red",
   };
 
   const URL_REGEX =
-    /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi;
+    /[(http(s)?)://(www.)?a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/gi;
 
-  const onSave = async(formData, e) => {
+  const onSave = async(formData: any, e: any) => {
     e.preventDefault();
     setLoading(true)
     formData.isContact = true
@@ -36,7 +51,7 @@ function Create(props) {
     await addDoc(
       collection(db, FIREBASE_COLLECTION_PEOPLES),
       formData
-    ).catch((err) => console.error(err)).then(() => {
+    ).catch((err: any) => console.error(err)).then(() => {
       navigate("/contact");
     }).finally(() => {
       setLoading(false)
@@ -121,7 +136,7 @@ function Create(props) {
                 })}
               />
             </div>
-            {errors.facebook && <span style={errorStyle}>Invalid URL</span>}
+            {errors.social_networks?.facebook && <span style={errorStyle}>Invalid URL</span>}
             <div className="mb-3">
               {" "}
               <input
@@ -134,7 +149,7 @@ function Create(props) {
                 })}
               />
             </div>
-            {errors.twitter && <span style={errorStyle}>Invalid URL</span>}
+            {errors.social_networks?.twitter && <span style={errorStyle}>Invalid URL</span>}
             <div className="mb-3">
               <input
                 type="text"
@@ -146,7 +161,7 @@ function Create(props) {
                 })}
               />
             </div>
-            {errors.instagram && <span style={errorStyle}>Invalid URL</span>}
+            {errors.social_networks?.instagram && <span style={errorStyle}>Invalid URL</span>}
             <div className="mb-3">
               <input
                 type="text"
@@ -158,7 +173,7 @@ function Create(props) {
                 })}
               />
             </div>
-            {errors.instagram && <span style={errorStyle}>Invalid URL</span>}
+            {errors.social_networks?.linkedin && <span style={errorStyle}>Invalid URL</span>}
             <div className="mb-3">
               <input
                 type="text"
@@ -167,7 +182,7 @@ function Create(props) {
                 {...register("social_networks.skype", { required: false, pattern: URL_REGEX })}
               />
             </div>
-            {errors.skype && <span style={errorStyle}>Invalid URL</span>}
+            {errors.social_networks?.skype && <span style={errorStyle}>Invalid URL</span>}
           </fieldset>
         </div>
         <div className="card-footer">

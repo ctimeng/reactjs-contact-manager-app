@@ -1,11 +1,11 @@
 const FIREBASE_ENABLE = true;
-const FIREBASE_COLLECTION_PEOPLES = "peoples";
+const FIREBASE_COLLECTION_PEOPLES: string = "peoples";
 const GRID_COLUMN = 4;
 const COLUMN_SIZE = 12 / GRID_COLUMN;
 
-const gridData = (peoples) => {
-  let rowData = [];
-  let columnData = [];
+const gridData = (peoples: object[]) => {
+  let rowData: object[] = [];
+  let columnData: object[] = [];
   if (peoples.length <= GRID_COLUMN) {
     rowData.push(peoples);
   } else {
@@ -22,7 +22,7 @@ const gridData = (peoples) => {
 };
 
 const searchPeoples = (
-  peoples = [],
+  peoples: any[] = [],
   search = '',
   city = ''
 ) => {
@@ -48,7 +48,7 @@ const searchPeoples = (
     });
 };
 
-const getFindIndexById = (peoples, id) => {
+const getFindIndexById = (peoples: any[], id: Number) => {
   return peoples.findIndex(people => people.id === id)
 }
 

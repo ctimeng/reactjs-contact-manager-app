@@ -2,14 +2,14 @@ import { useMemo } from "react";
 import CardColumnView from "../custom/CardColumnView";
 import { COLUMN_SIZE, gridData } from "../../global";
 
-const ColumnView = (props) => {
+const ColumnView = (props: any) => {
   const peopleRows = useMemo(() => gridData(props.peoples), [props.peoples]);
 
   return (
     <div>
-      {peopleRows.map((peopleColumns, i) => (
+      {peopleRows.map((peopleColumns: any, i) => (
         <div className="row" key={i}>
-          {peopleColumns.map((people, index) => (
+          {peopleColumns.map((people: any) => (
             <div className={"col-md-" + COLUMN_SIZE} key={people.id}>
               <CardColumnView
                 people={people}
@@ -28,4 +28,4 @@ const ColumnView = (props) => {
   );
 };
 
-export default ColumnView;
+export default ColumnView

@@ -19,8 +19,8 @@ const FilterData = () => {
   }
 }
 
-const SearchBarView = ({cities, filter}) => {
-  const {option, city, search, setOption, setSearch, setCity} = filter;
+const SearchBarView = ({cities, filter}:{cities:Array<any>; filter: any}) => {
+  const {option, _city, _search, setOption, setSearch, setCity} = filter;
   return (
     <form>
       <div className="row">
@@ -33,7 +33,7 @@ const SearchBarView = ({cities, filter}) => {
                 type="radio"
                 name="options"
                 autoComplete="off"
-                checked=""
+                checked={false}
                 value={DISPLAY_COLUMN}
                 onChange={(event) => setOption(event.target.value)}
               />{" "}

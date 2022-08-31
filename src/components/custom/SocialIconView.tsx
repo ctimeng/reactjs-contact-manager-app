@@ -1,5 +1,5 @@
-const SocialIconView = (props) => {
-  const socialNetworkIcon = (social) => {
+const SocialIconView = (props: any) => {
+  const socialNetworkIcon = (social: string) => {
     switch (social) {
       case "twitter":
         return <i className="fab fa-twitter fa-fw"></i>;
@@ -17,4 +17,4 @@ const SocialIconView = (props) => {
   return socialNetworkIcon(props.social);
 };
 
-export default SocialIconView;
+export default SocialIconView

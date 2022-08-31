@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { connect } from "react-redux";
 
-const List = (props) => {
+const List = (props: any) => {
   const [isColumn, setIsColumn] = useState(true);
   const [search, setSearch] = useState("");
 
   const filteredData = props.peoples
-    .map((people) => people["company"])
+    .map((people: any) => people["company"])
     // store the keys of the unique objects
-    .map((people, index, final) => final.indexOf(people) === index && index)
-    .filter((people) => props.peoples[people])
-    .filter((people) => {
+    .map((people: any, index: any, final: any) => final.indexOf(people) === index && index)
+    .filter((people: any) => props.peoples[people])
+    .filter((people: any) => {
       if (search === "") {
         return props.peoples[people];
       } else {
@@ -19,13 +19,13 @@ const List = (props) => {
           .includes(search.toLowerCase());
       }
     })
-    .map((people) => props.peoples[people]);
+    .map((people: any) => props.peoples[people]);
 
-  const columnViewHandler = (e) => {
+  const columnViewHandler = (e: any) => {
     setIsColumn(true);
   };
 
-  const rowViewHandler = (e) => {
+  const rowViewHandler = (e: any) => {
     setIsColumn(false);
   };
 
@@ -76,7 +76,7 @@ const List = (props) => {
           "d-flex bd-highlight mb-3 " + (isColumn ? "flex-row" : "flex-column")
         }
       >
-        {filteredData.map((people, index) => (
+        {filteredData.map((people: any, index: any) => (
           <div className="card ml-2" key={index}>
             <div className="card-body">
               <p className="card-text">{people.company}</p>
@@ -88,7 +88,7 @@ const List = (props) => {
   );
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: any) => ({
   ...state,
 });
 

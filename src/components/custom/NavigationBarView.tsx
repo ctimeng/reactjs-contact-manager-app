@@ -1,4 +1,4 @@
-const NavigationBarView = ({page}) => {
+const NavigationBarView = ({page}: {page: String}) => {
     return <div className="content-header">
     <div className="container-fluid">
       <div className="row mb-2">
@@ -18,4 +18,4 @@ const NavigationBarView = ({page}) => {
   </div>
 }
 
-export default NavigationBarView;
+export default NavigationBarView

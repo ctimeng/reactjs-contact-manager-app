@@ -32,7 +32,7 @@ import {
   orderBy
 } from "firebase/firestore";
 
-function App(props) {
+function App(props: any) {
   const db = getFirestore(firebaseApp);
 
   const clearFirebaseData = async () => {
@@ -88,13 +88,13 @@ function App(props) {
   );
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: any) => ({
   ...state,
 });
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: any) {
   return {
-    AddAllPeople: (peoples) => dispatch(AddAllPeople(peoples)),
+    AddAllPeople: (peoples: any) => dispatch(AddAllPeople(peoples))
   };
 }
 
