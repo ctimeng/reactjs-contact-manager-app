@@ -8,7 +8,7 @@ import {
   getDoc,
   doc,
   updateDoc,
-  Firestore
+  Firestore,
 } from "firebase/firestore";
 
 type FormValues = {
@@ -23,14 +23,13 @@ type FormValues = {
     instagram: string;
     linkedin: string;
     skype: string;
-  }
+  };
 };
 
-function Edit(props: any) {
-
+function Edit() {
   const navigate = useNavigate();
   const params: any = useParams();
-  const db: Firestore = getFirestore(firebaseApp);
+  const firestore: Firestore = getFirestore(firebaseApp);
   const [loading, setLoading] = useState(false);
   const [people, setPeople] = useState({});
 
@@ -38,7 +37,7 @@ function Edit(props: any) {
     register,
     handleSubmit,
     formState: { errors },
-    reset
+    reset,
   } = useForm<FormValues>({
     defaultValues: useMemo(() => {
       return people;
@@ -52,33 +51,33 @@ function Edit(props: any) {
   const URL_REGEX =
     /[(http(s)?)://(www.)?a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/gi;
 
-  const onSave = async(formData: any, e: any) => {
-    e.preventDefault();
-    setLoading(true)
-    formData.isContact = true
-    const peopleDocRef = doc(db, FIREBASE_COLLECTION_PEOPLES, params.id)
-    await updateDoc(
-      peopleDocRef,
-      formData
-    ).catch((err) => console.error(err)).then(() => {
-      navigate("/contact");
-    }).finally(() => {
-      setLoading(false)
-    });
-  }
+  const onSave = async (formData: any, event: any) => {
+    event.preventDefault();
+    setLoading(true);
+    formData.isContact = true;
+    const peopleDocRef = doc(firestore, FIREBASE_COLLECTION_PEOPLES, params.id);
+    await updateDoc(peopleDocRef, formData)
+      .catch((err) => console.error(err))
+      .then(() => {
+        navigate("/contact");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
   const getPeople = async () => {
-    setLoading(true)
-    const peopleDocRef = doc(db, FIREBASE_COLLECTION_PEOPLES, params.id)
-    const docSnap =  await getDoc(peopleDocRef);
-    setPeople(docSnap.data()!)
-    reset(docSnap.data())
-    setLoading(false)
-  } 
+    setLoading(true);
+    const peopleDocRef = doc(firestore, FIREBASE_COLLECTION_PEOPLES, params.id);
+    const docSnap = await getDoc(peopleDocRef);
+    setPeople(docSnap.data()!);
+    reset(docSnap.data());
+    setLoading(false);
+  };
 
   useEffect(() => {
-    getPeople()
-  }, [])
+    getPeople();
+  }, []);
 
   return (
     <div className="card">
@@ -135,9 +134,9 @@ function Edit(props: any) {
                 type="text"
                 className="form-control"
                 placeholder="Avatar"
-                {...register("avatar", { 
-                  required: {value: true, message: "This field is required"}, 
-                  pattern: {value: URL_REGEX, message:"Invalid URL"}
+                {...register("avatar", {
+                  required: { value: true, message: "This field is required" },
+                  pattern: { value: URL_REGEX, message: "Invalid URL" },
                 })}
               />
             </div>
@@ -158,7 +157,9 @@ function Edit(props: any) {
                 })}
               />
             </div>
-            {errors.social_networks?.facebook && <span style={errorStyle}>Invalid URL</span>}
+            {errors.social_networks?.facebook && (
+              <span style={errorStyle}>Invalid URL</span>
+            )}
             <div className="mb-3">
               {" "}
               <input
@@ -171,7 +172,9 @@ function Edit(props: any) {
                 })}
               />
             </div>
-            {errors.social_networks?.twitter && <span style={errorStyle}>Invalid URL</span>}
+            {errors.social_networks?.twitter && (
+              <span style={errorStyle}>Invalid URL</span>
+            )}
             <div className="mb-3">
               <input
                 type="text"
@@ -183,7 +186,9 @@ function Edit(props: any) {
                 })}
               />
             </div>
-            {errors.social_networks?.instagram && <span style={errorStyle}>Invalid URL</span>}
+            {errors.social_networks?.instagram && (
+              <span style={errorStyle}>Invalid URL</span>
+            )}
             <div className="mb-3">
               <input
                 type="text"
@@ -195,21 +200,28 @@ function Edit(props: any) {
                 })}
               />
             </div>
-            {errors.social_networks?.instagram && <span style={errorStyle}>Invalid URL</span>}
+            {errors.social_networks?.instagram && (
+              <span style={errorStyle}>Invalid URL</span>
+            )}
             <div className="mb-3">
               <input
                 type="text"
                 className="form-control"
                 placeholder="Skype"
-                {...register("social_networks.skype", { required: false, pattern: URL_REGEX })}
+                {...register("social_networks.skype", {
+                  required: false,
+                  pattern: URL_REGEX,
+                })}
               />
             </div>
-            {errors.social_networks?.skype && <span style={errorStyle}>Invalid URL</span>}
+            {errors.social_networks?.skype && (
+              <span style={errorStyle}>Invalid URL</span>
+            )}
           </fieldset>
         </div>
         <div className="card-footer">
           <button type="submit" className="btn btn-info">
-            Update {loading ? (<i className="fas fa-spinner fa-spin"></i>) : ''}
+            Update {loading ? <i className="fas fa-spinner fa-spin"></i> : ""}
           </button>
           <Link
             to={{ pathname: `/contact` }}
@@ -223,4 +235,4 @@ function Edit(props: any) {
   );
 }
 
-export default Edit
+export default Edit;

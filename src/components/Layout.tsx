@@ -2,8 +2,8 @@ import { Outlet, NavLink } from "react-router-dom";
 
 const Layout = () => {
 
-  const handleLogout = async (e: any) => {
-    e.preventDefault();
+  const handleLogout = async (event: any) => {
+    event.preventDefault();
   };
 
   return (

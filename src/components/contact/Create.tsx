@@ -1,13 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import firebaseApp from "../../Firebase";
 import { FIREBASE_COLLECTION_PEOPLES } from "../../global";
-import {
-  getFirestore,
-  collection,
-  addDoc
-} from "firebase/firestore";
+import { getFirestore, collection, addDoc } from "firebase/firestore";
 
 type FormValues = {
   name: string;
@@ -21,13 +17,12 @@ type FormValues = {
     instagram: string;
     linkedin: string;
     skype: string;
-  }
+  };
 };
 
-function Create(props: any) {
-
+const Create = () => {
   const navigate = useNavigate();
-  const db = getFirestore(firebaseApp);
+  const firestore = getFirestore(firebaseApp);
   const [loading, setLoading] = useState(false);
 
   const {
@@ -43,24 +38,24 @@ function Create(props: any) {
   const URL_REGEX =
     /[(http(s)?)://(www.)?a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/gi;
 
-  const onSave = async(formData: any, e: any) => {
-    e.preventDefault();
-    setLoading(true)
-    formData.isContact = true
-    formData.isFavourite = false
-    await addDoc(
-      collection(db, FIREBASE_COLLECTION_PEOPLES),
-      formData
-    ).catch((err: any) => console.error(err)).then(() => {
-      navigate("/contact");
-    }).finally(() => {
-      setLoading(false)
-    });
-  }
+  const onSubmit = async (formData: any, event: any) => {
+    event.preventDefault();
+    setLoading(true);
+    formData.isContact = true;
+    formData.isFavourite = false;
+    await addDoc(collection(firestore, FIREBASE_COLLECTION_PEOPLES), formData)
+      .catch((error: any) => console.error(error))
+      .then(() => {
+        navigate("/contact");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
   return (
     <div className="card">
-      <form onSubmit={handleSubmit(onSave)}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="card-body">
           <fieldset className="border p-2">
             <legend className="w-auto">Personal</legend>
@@ -113,9 +108,9 @@ function Create(props: any) {
                 type="text"
                 className="form-control"
                 placeholder="Avatar"
-                {...register("avatar", { 
-                  required: {value: true, message: "This field is required"}, 
-                  pattern: {value: URL_REGEX, message:"Invalid URL"}
+                {...register("avatar", {
+                  required: { value: true, message: "This field is required" },
+                  pattern: { value: URL_REGEX, message: "Invalid URL" },
                 })}
               />
             </div>
@@ -136,7 +131,9 @@ function Create(props: any) {
                 })}
               />
             </div>
-            {errors.social_networks?.facebook && <span style={errorStyle}>Invalid URL</span>}
+            {errors.social_networks?.facebook && (
+              <span style={errorStyle}>Invalid URL</span>
+            )}
             <div className="mb-3">
               {" "}
               <input
@@ -149,7 +146,9 @@ function Create(props: any) {
                 })}
               />
             </div>
-            {errors.social_networks?.twitter && <span style={errorStyle}>Invalid URL</span>}
+            {errors.social_networks?.twitter && (
+              <span style={errorStyle}>Invalid URL</span>
+            )}
             <div className="mb-3">
               <input
                 type="text"
@@ -161,7 +160,9 @@ function Create(props: any) {
                 })}
               />
             </div>
-            {errors.social_networks?.instagram && <span style={errorStyle}>Invalid URL</span>}
+            {errors.social_networks?.instagram && (
+              <span style={errorStyle}>Invalid URL</span>
+            )}
             <div className="mb-3">
               <input
                 type="text"
@@ -173,21 +174,28 @@ function Create(props: any) {
                 })}
               />
             </div>
-            {errors.social_networks?.linkedin && <span style={errorStyle}>Invalid URL</span>}
+            {errors.social_networks?.linkedin && (
+              <span style={errorStyle}>Invalid URL</span>
+            )}
             <div className="mb-3">
               <input
                 type="text"
                 className="form-control"
                 placeholder="Skype"
-                {...register("social_networks.skype", { required: false, pattern: URL_REGEX })}
+                {...register("social_networks.skype", {
+                  required: false,
+                  pattern: URL_REGEX,
+                })}
               />
             </div>
-            {errors.social_networks?.skype && <span style={errorStyle}>Invalid URL</span>}
+            {errors.social_networks?.skype && (
+              <span style={errorStyle}>Invalid URL</span>
+            )}
           </fieldset>
         </div>
         <div className="card-footer">
           <button type="submit" className="btn btn-info">
-            Save {loading ? (<i className="fas fa-spinner fa-spin"></i>) : ''}
+            Save {loading ? <i className="fas fa-spinner fa-spin"></i> : ""}
           </button>
           <Link
             to={{ pathname: `/contact` }}
@@ -199,6 +207,6 @@ function Create(props: any) {
       </form>
     </div>
   );
-}
+};
 
 export default Create;

@@ -1,4 +1,3 @@
-import React from 'react';
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "admin-lte/dist/css/adminlte.min.css";
@@ -33,19 +32,19 @@ import {
 } from "firebase/firestore";
 
 function App(props: any) {
-  const db = getFirestore(firebaseApp);
+  const firestore = getFirestore(firebaseApp);
 
   const clearFirebaseData = async () => {
-    const itemsCol = collection(db, FIREBASE_COLLECTION_PEOPLES);
+    const itemsCol = collection(firestore, FIREBASE_COLLECTION_PEOPLES);
     const collections = await getDocs(itemsCol);
     collections.forEach((docPeople) => {
-      const noteRef = doc(db, FIREBASE_COLLECTION_PEOPLES, docPeople.id);
+      const noteRef = doc(firestore, FIREBASE_COLLECTION_PEOPLES, docPeople.id);
       deleteDoc(noteRef);
     });
   };
 
   const initData = async() => {
-    const q = query(collection(db, FIREBASE_COLLECTION_PEOPLES), orderBy('name'))
+    const q = query(collection(firestore, FIREBASE_COLLECTION_PEOPLES), orderBy('name'))
     onSnapshot(q, (querySnapshot) => {
       let peoples: any[] = []
       querySnapshot.docs.forEach(function(doc){

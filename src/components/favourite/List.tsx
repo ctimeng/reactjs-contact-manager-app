@@ -12,7 +12,7 @@ const List = (props: any) => {
   const [loading, setLoading] = useState(0);
   const filter = FilterData();
 
-  const db = getFirestore(firebaseApp);
+  const firestore = getFirestore(firebaseApp);
 
   const filteredPeoples = searchPeoples(props.peoples, filter.search, filter.city).filter(
     (people) => people.isFavourite === true
@@ -21,9 +21,9 @@ const List = (props: any) => {
   const updateFirebase = async(id: string, fields: object, loading: number) => {
     setLoading(loading)
     setSelectedId(id)
-    const noteRef = doc(db, FIREBASE_COLLECTION_PEOPLES, id);
-    await updateDoc(noteRef, fields).catch((err) => {
-      console.error(err)
+    const noteRef = doc(firestore, FIREBASE_COLLECTION_PEOPLES, id);
+    await updateDoc(noteRef, fields).catch((error) => {
+      console.error(error)
     }).finally(() => {
       setLoading(0)
     })
@@ -56,7 +56,7 @@ const List = (props: any) => {
   );
 };
 
-const mapStateToProps = (state: any) => ({
+const mapStateToProps = (state: object) => ({
   ...state,
 });
 

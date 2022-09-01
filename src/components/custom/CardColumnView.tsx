@@ -1,6 +1,18 @@
 import SocialIconView from "./SocialIconView";
 import { Link } from "react-router-dom";
 
+type Props = {
+  people: any;
+  selectedId?: Number;
+  loading?: Number;
+  onAddContact: any;
+  onDeleteContact: any;
+  onAddFavourite: any;
+  onDeleteFavourite: any;
+  onDeletePeople: any;
+  onEditPeople?: any;
+}
+
 const CardColumnView = ({
   people,
   selectedId = 0,
@@ -11,17 +23,7 @@ const CardColumnView = ({
   onDeleteFavourite,
   onDeletePeople,
   onEditPeople,
-}: {
-  people: any;
-  selectedId?: Number;
-  loading?: Number;
-  onAddContact: any;
-  onDeleteContact: any;
-  onAddFavourite: any;
-  onDeleteFavourite: any;
-  onDeletePeople: any;
-  onEditPeople?: any;
-}) => {
+}: Props) => {
   const myStyle = {
     borderBottom: 0,
   };
@@ -43,7 +45,7 @@ const CardColumnView = ({
           <li className="nav-item pt-2 pb-2" style={myStyle}>
             {Object.keys(people.social_networks)
               .sort()
-              .map((key, index) => (
+              .map((key: string, index: number) => (
                 <a
                   href={people.social_networks[key]}
                   className="btn btn-sm btn-outline-primary ml-2"
@@ -71,7 +73,7 @@ const CardColumnView = ({
                 <a
                   href="#/"
                   className="btn btn-sm btn-primary ml-2 rounded-pill"
-                  onClick={(e) => onAddContact(e, `${people.id}`)}
+                  onClick={(event: any) => onAddContact(event, `${people.id}`)}
                 >
                   ADD TO CONTACTS{" "}
                   {people.id === selectedId && loading === 1 ? (
@@ -84,7 +86,7 @@ const CardColumnView = ({
                 <a
                   href="#/"
                   className="btn btn-sm btn-danger ml-2 rounded-pill"
-                  onClick={(e) => onDeleteContact(e, `${people.id}`)}
+                  onClick={(event: any) => onDeleteContact(event, `${people.id}`)}
                 >
                   DELETE FROM CONTACTS{" "}
                   {people.id === selectedId && loading === 1 ? (
@@ -107,7 +109,7 @@ const CardColumnView = ({
                 <a
                   href="#/"
                   className="btn btn-sm btn-primary ml-2 mt-2 rounded-pill"
-                  onClick={(e) => onAddFavourite(e, `${people.id}`)}
+                  onClick={(event: any) => onAddFavourite(event, `${people.id}`)}
                 >
                   ADD TO FAVOURITES{" "}
                   {people.id === selectedId && loading === 2 ? (
@@ -120,7 +122,7 @@ const CardColumnView = ({
                 <a
                   href="#/"
                   className="btn btn-sm btn-danger ml-2 mt-2 rounded-pill"
-                  onClick={(e) => onDeleteFavourite(e, `${people.id}`)}
+                  onClick={(event: any) => onDeleteFavourite(event, `${people.id}`)}
                 >
                   DELETE FROM FAVOURITES{" "}
                   {people.id === selectedId && loading === 2 ? (
@@ -151,7 +153,7 @@ const CardColumnView = ({
               <a
                 href="#/"
                 className="btn btn-sm btn-danger ml-2 mt-2 rounded-pill"
-                onClick={(e) => onDeletePeople(e, `${people.id}`)}
+                onClick={(event: any) => onDeletePeople(event, `${people.id}`)}
               >
                 DELETE PEOPLE
                 {people.id === selectedId && loading === 3 ? (

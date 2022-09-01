@@ -19,7 +19,7 @@ const FilterData = () => {
   }
 }
 
-const SearchBarView = ({cities, filter}:{cities:Array<any>; filter: any}) => {
+const SearchBarView = ({cities, filter}:{cities:Array<string>; filter: any}) => {
   const {option, _city, _search, setOption, setSearch, setCity} = filter;
   return (
     <form>
@@ -35,7 +35,7 @@ const SearchBarView = ({cities, filter}:{cities:Array<any>; filter: any}) => {
                 autoComplete="off"
                 checked={false}
                 value={DISPLAY_COLUMN}
-                onChange={(event) => setOption(event.target.value)}
+                onChange={(event: any) => setOption(event.target.value)}
               />{" "}
               <i className="fas fa-th-large"></i>
             </label>
@@ -47,7 +47,7 @@ const SearchBarView = ({cities, filter}:{cities:Array<any>; filter: any}) => {
                 name="options"
                 autoComplete="off"
                 value={DISPLAY_ROW}
-                onChange={(event) => setOption(event.target.value)}
+                onChange={(event: any) => setOption(event.target.value)}
               />{" "}
               <i className="fas fa-align-justify"></i>
             </label>
@@ -68,7 +68,7 @@ const SearchBarView = ({cities, filter}:{cities:Array<any>; filter: any}) => {
                 type="search"
                 className="form-control"
                 placeholder="Search"
-                onChange={(event) => setSearch(event.target.value)}
+                onChange={(event: any) => setSearch(event.target.value)}
               />
               <div className="input-group-append">
                 <button type="button" className="btn btn-default">
@@ -82,11 +82,11 @@ const SearchBarView = ({cities, filter}:{cities:Array<any>; filter: any}) => {
           <div className="form-group">
             <select
               className="form-control"
-              onChange={(event) => setCity(event.target.value)}
+              onChange={(event: any) => setCity(event.target.value)}
             >
               <option value="">--All--</option>
-              {cities.map((city, i) => (
-                <option value={city} key={i}>
+              {cities.map((city: string, index: number) => (
+                <option value={city} key={index}>
                   {city}
                 </option>
               ))}

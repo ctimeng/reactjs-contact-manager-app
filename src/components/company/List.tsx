@@ -8,7 +8,7 @@ const List = (props: any) => {
   const filteredData = props.peoples
     .map((people: any) => people["company"])
     // store the keys of the unique objects
-    .map((people: any, index: any, final: any) => final.indexOf(people) === index && index)
+    .map((people: any, index: number, final: any) => final.indexOf(people) === index && index)
     .filter((people: any) => props.peoples[people])
     .filter((people: any) => {
       if (search === "") {
@@ -21,11 +21,11 @@ const List = (props: any) => {
     })
     .map((people: any) => props.peoples[people]);
 
-  const columnViewHandler = (e: any) => {
+  const columnViewHandler = () => {
     setIsColumn(true);
   };
 
-  const rowViewHandler = (e: any) => {
+  const rowViewHandler = () => {
     setIsColumn(false);
   };
 
@@ -76,7 +76,7 @@ const List = (props: any) => {
           "d-flex bd-highlight mb-3 " + (isColumn ? "flex-row" : "flex-column")
         }
       >
-        {filteredData.map((people: any, index: any) => (
+        {filteredData.map((people: any, index: number) => (
           <div className="card ml-2" key={index}>
             <div className="card-body">
               <p className="card-text">{people.company}</p>
@@ -88,8 +88,8 @@ const List = (props: any) => {
   );
 };
 
-const mapStateToProps = (state: any) => ({
-  ...state,
+const mapStateToProps = (state: object) => ({
+  ...state
 });
 
 export default connect(mapStateToProps, null)(List);

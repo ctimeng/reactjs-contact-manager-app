@@ -14,12 +14,12 @@ const List = (props: any) => {
 
   const filteredData = searchPeoples(props.peoples, filter.search, filter.city)
 
-  const db = getFirestore(firebaseApp);
+  const firestore = getFirestore(firebaseApp);
 
   const updateFirebase = async(id: string, fields: object, loading: number) => {
     setLoading(loading);
     setSelectedId(id);
-    const noteRef = doc(db, FIREBASE_COLLECTION_PEOPLES, id);
+    const noteRef = doc(firestore, FIREBASE_COLLECTION_PEOPLES, id);
     await updateDoc(noteRef, fields)
       .catch((err) => {
         console.error(err);
@@ -60,10 +60,10 @@ const List = (props: any) => {
     ) {
       setLoading(3);
       setSelectedId(id);
-      const noteRef = doc(db, FIREBASE_COLLECTION_PEOPLES, id);
+      const noteRef = doc(firestore, FIREBASE_COLLECTION_PEOPLES, id);
       await deleteDoc(noteRef)
-        .catch((err) => {
-          console.error(err);
+        .catch((error) => {
+          console.error(error);
         })
         .finally(() => {
           setLoading(0);
@@ -111,7 +111,7 @@ const List = (props: any) => {
   );
 };
 
-const mapStateToProps = (state: any) => ({
+const mapStateToProps = (state: object) => ({
   ...state,
 });
 

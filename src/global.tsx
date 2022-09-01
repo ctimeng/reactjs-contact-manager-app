@@ -9,9 +9,9 @@ const gridData = (peoples: object[]) => {
   if (peoples.length <= GRID_COLUMN) {
     rowData.push(peoples);
   } else {
-    peoples.forEach(function (people, i) {
+    peoples.forEach(function (people:any, index) {
       columnData.push(people);
-      if ((i + 1) % GRID_COLUMN === 0 || i === peoples.length - 1) {
+      if ((index + 1) % GRID_COLUMN === 0 || index === peoples.length - 1) {
         rowData.push(columnData);
         columnData = [];
       }
@@ -27,7 +27,7 @@ const searchPeoples = (
   city = ''
 ) => {
   return peoples
-    .filter((people) => {
+    .filter((people: any) => {
       if (search === "") {
         return people;
       } else {
@@ -39,7 +39,7 @@ const searchPeoples = (
         );
       }
     })
-    .filter((people) => {
+    .filter((people: any) => {
       if (city === "") {
         return people;
       } else {
@@ -48,7 +48,7 @@ const searchPeoples = (
     });
 };
 
-const getFindIndexById = (peoples: any[], id: Number) => {
+const getFindIndexById = (peoples: any[], id: number) => {
   return peoples.findIndex(people => people.id === id)
 }
 

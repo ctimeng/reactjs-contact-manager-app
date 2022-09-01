@@ -70,7 +70,7 @@ const CardRowView = ({
               <a
                 href="#/"
                 className="btn btn-sm btn-primary mt-2 rounded-pill"
-                onClick={(e) => onAddContact(e, `${people.id}`)}
+                onClick={(event) => onAddContact(event, `${people.id}`)}
               >
                 ADD TO CONTACTS
               </a>
@@ -78,7 +78,7 @@ const CardRowView = ({
               <a
                 href="#/"
                 className="btn btn-sm btn-danger mt-2 rounded-pill"
-                onClick={(e) => onDeleteContact(e, `${people.id}`)}
+                onClick={(event) => onDeleteContact(event, `${people.id}`)}
               >
                 DELETE FROM CONTACTS
               </a>
@@ -97,7 +97,7 @@ const CardRowView = ({
               <a
                 href="#/"
                 className="btn btn-sm btn-primary mt-2 rounded-pill"
-                onClick={(e) => onAddFavourite(e, `${people.id}`)}
+                onClick={(event) => onAddFavourite(event, `${people.id}`)}
               >
                 ADD TO FAVOURITES
               </a>
@@ -105,7 +105,7 @@ const CardRowView = ({
               <a
                 href="#/"
                 className="btn btn-sm btn-danger mt-2 rounded-pill"
-                onClick={(e) => onDeleteFavourite(e, `${people.id}`)}
+                onClick={(event) => onDeleteFavourite(event, `${people.id}`)}
               >
                 DELETE FROM FAVOURITES
               </a>
@@ -133,7 +133,7 @@ const CardRowView = ({
             <a
               href="#/"
               className="btn btn-sm btn-danger ml-2 mt-2 rounded-pill"
-              onClick={(e) => onDeletePeople(e, `${people.id}`)}
+              onClick={(event) => onDeletePeople(event, `${people.id}`)}
             >
               DELETE PEOPLE
               {people.id === selectedId && loading === 3 ? (

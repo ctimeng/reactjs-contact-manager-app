@@ -7,8 +7,8 @@ const ColumnView = (props: any) => {
 
   return (
     <div>
-      {peopleRows.map((peopleColumns: any, i) => (
-        <div className="row" key={i}>
+      {peopleRows.map((peopleColumns: any, index: number) => (
+        <div className="row" key={index}>
           {peopleColumns.map((people: any) => (
             <div className={"col-md-" + COLUMN_SIZE} key={people.id}>
               <CardColumnView
